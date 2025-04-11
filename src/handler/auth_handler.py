@@ -1,29 +1,39 @@
-import requests
 import os
-from pydantic import BaseModel, Field
+
+import requests
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class AuthReq(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
     consumer_key: str = Field(..., alias="consumer_key")
     consumer_secret: str = Field(..., alias="consumer_secret")
     password: str = Field(..., alias="password")
-    username: str = Field(..., alias="username")       
+    email: str = Field(..., alias="username")
+
 
 class AuthRes(BaseModel):
     access_token: str
     refresh_token: str
     username: str
-    
-class AuthHandler():
+
+
+class AuthHandler:
     def __init__(self):
         self.req = self.__new_req()
-        
+
     def __new_req(self) -> AuthReq:
         email = os.getenv("STUDYPLUS_EMAIL")
         if not email:
-            raise ValueError("STUDYPLUS_EMAIL must be set in the environment variables.")
+            raise ValueError(
+                "STUDYPLUS_EMAIL must be set in the environment variables."
+            )
         password = os.getenv("STUDYPLUS_PASSWORD")
         if not password:
-            raise ValueError("STUDYPLUS_PASSWORD must be set in the environment variables.")
+            raise ValueError(
+                "STUDYPLUS_PASSWORD must be set in the environment variables."
+            )
         consumer_key = os.getenv("CONSUMER_KEY")
         if not consumer_key:
             raise ValueError("CONSUMER_KEY must be set in the environment variables.")
@@ -36,19 +46,18 @@ class AuthHandler():
             consumer_key=consumer_key,
             consumer_secret=consumer_secret,
             password=password,
-            username=email,
+            email=email,  # pyright: ignore
         )
-        
+
     def auth(self) -> AuthRes:
         url = "https://api.studyplus.jp/2/client_auth"
         payload = {
             "consumer_key": self.req.consumer_key,
             "consumer_secret": self.req.consumer_secret,
             "password": self.req.password,
-            "username": self.req.username,
+            "username": self.req.email,
         }
 
-        # リクエストヘッダーを設定
         headers = {
             "Content-Type": "application/json; charset=utf-8",
             "Accept": "*/*",
@@ -67,9 +76,7 @@ class AuthHandler():
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
         }
 
-        # POSTリクエストを送信
         response = requests.post(url, json=payload, headers=headers)
-
         if response.status_code == 200:
             return AuthRes(**response.json())
         else:
