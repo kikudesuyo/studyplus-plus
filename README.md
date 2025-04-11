@@ -11,6 +11,23 @@
 
 ### セットアップ方法
 
+#### 仮想環境セットアップ
+
+```
+python -m venv .venv
+
+#仮想環境有効化
+cd studyplus-cli/
+source .venv/bin/activate
+#ライブラリのインストール
+pip install -r requirements.txt
+
+#環境変数の登録
+.venv/bin/activateにて`YOUR_PATH`を指定して下記を記述してください
+#環境変数を追加
+export PYTHONPATH="YOUR_PATH/magdas/backend/src:$PYTHONPATH"
+```
+
 #### .env ファイル作成
 
 ```
