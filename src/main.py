@@ -52,16 +52,49 @@ def auth(req: AuthReq) -> AuthRes:
     response = requests.post(url, json=payload, headers=headers)
 
     if response.status_code == 200:
-        return response.json()
+        return AuthRes(**response.json())
     else:
         raise Exception(f"Error: {response.status_code} - {response.text}")
 
 
-# ユーザーからの入力を受け取る
-email = input("Enter your email: ")
-password = input("Enter your password: ")
+def get_me(access_token: str):
+    url = "https://api.studyplus.jp/2/me"
+    headers = {
+        "Authorization": f"OAuth {access_token}",
+        "Content-Type": "application/json; charset=utf-8",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "ja",
+        "Client-Service": "Studyplus",
+        "Origin": "https://app.studyplus.jp",
+        "Referer": "https://app.studyplus.jp/",
+        "Sec-CH-UA": '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+        "Sec-CH-UA-Mobile": "?0",
+        "Sec-CH-UA-Platform": '"macOS"',
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Stpl-Client-Sp2": "1",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(
+            f"Failed to fetch user info: {response.status_code} - {response.text}"
+        )
 
+
+email = os.getenv("STUDYPLUS_EMAIL")
+if not email:
+    raise ValueError("STUDYPLUS_EMAIL must be set in the environment variables.")
+password = os.getenv("STUDYPLUS_PASSWORD")
+if not password:
+    raise ValueError("STUDYPLUS_PASSWORD must be set in the environment variables.")
 consumer_key = os.getenv("CONSUMER_KEY")
+if not consumer_key:
+    raise ValueError("CONSUMER_KEY must be set in the environment variables.")
 consumer_secret = os.getenv("CONSUMER_SECRET")
 if not consumer_key or not consumer_secret:
     raise ValueError(
@@ -77,6 +110,5 @@ auth_req = AuthReq(
 )
 auth_req = auth(auth_req)
 
-access_token = auth_req.access_token
-refresh_token = auth_req.refresh_token
-username = auth_req.username
+me = get_me(auth_req.access_token)
+print(me)
