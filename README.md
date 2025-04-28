@@ -1,6 +1,7 @@
-<img src="" alt="My Skills" width="100" />
-
 ### スタディプラスの CLI 実装
+
+<img src="https://github.com/user-attachments/assets/10cddd4f-447a-44b0-abf9-c3a41bdeee82" alt="My Skills" width="75" />
+
 
 ### 今後の実装内容
 
