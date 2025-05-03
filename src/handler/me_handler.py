@@ -1,5 +1,6 @@
 import requests
 
+
 def get_me(access_token: str):
     url = "https://api.studyplus.jp/2/me"
     headers = {
@@ -27,4 +28,3 @@ def get_me(access_token: str):
         raise Exception(
             f"Failed to fetch user info: {response.status_code} - {response.text}"
         )
-

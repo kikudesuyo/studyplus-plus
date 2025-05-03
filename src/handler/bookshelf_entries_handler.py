@@ -6,11 +6,12 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class BookshelfEntriesReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
-    
+
     username: str = Field(..., alias="username")
-    incrude_categories: bool = Field(..., alias="include_categories") 
-    include_drill: bool = Field(..., alias="include_drill") 
-    
+    incrude_categories: bool = Field(..., alias="include_categories")
+    include_drill: bool = Field(..., alias="include_drill")
+
+
 class BookshelfEntriesMaterial(BaseModel):
     material_code: str
     user_category_id: Optional[int] = None
@@ -18,28 +19,31 @@ class BookshelfEntriesMaterial(BaseModel):
     material_title: str
     material_image_url: Optional[str] = None
 
+
 class BookshelfEntriesStatus(BaseModel):
     open: Optional[list[BookshelfEntriesMaterial]] = None
     in_progress: Optional[list[BookshelfEntriesMaterial]] = None
     closed: Optional[list[BookshelfEntriesMaterial]] = None
-    
+
+
 class BookshelfEntriesRes(BaseModel):
-    bookshelf_entries: BookshelfEntriesStatus  
-    
-class BookshelfEntriesHandler():
+    bookshelf_entries: BookshelfEntriesStatus
+
+
+class BookshelfEntriesHandler:
     def __init__(self, access_token, username):
         self.access_token = access_token
         self.username = username
         self.req = self.__new_req()
 
-    def __new_req(self) -> BookshelfEntriesReq:    
+    def __new_req(self) -> BookshelfEntriesReq:
         return BookshelfEntriesReq(
             username=self.username,
             include_categories=True,
             include_drill=True,
-        )    
+        )
 
-    def get_bookshelf_entries(self) -> BookshelfEntriesRes:  
+    def get_bookshelf_entries(self) -> BookshelfEntriesRes:
         url = f"https://api.studyplus.jp/2/bookshelf_entries?username={self.username}&include_categories=true&include_drill=true"
         headers = {
             "accept": "*/*",
@@ -67,4 +71,3 @@ class BookshelfEntriesHandler():
             raise Exception(
                 f"Failed to fetch bookshelf entries: {response.status_code} - {response.text}"
             )
-        
