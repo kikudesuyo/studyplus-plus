@@ -1,7 +1,6 @@
+<img src="https://github.com/user-attachments/assets/10cddd4f-447a-44b0-abf9-c3a41bdeee82" alt="My Skills" width="60" />
+
 ### スタディプラスの CLI 実装
-
-<img src="https://github.com/user-attachments/assets/10cddd4f-447a-44b0-abf9-c3a41bdeee82" alt="My Skills" width="75" />
-
 
 ### 今後の実装内容
 
@@ -45,4 +44,4 @@ cp -p .env.example .env
 
 ### 使用技術
 
-[![My Skills](https://skillicons.dev/icons?i=python)]
+![My Skills](https://skillicons.dev/icons?i=python)
