@@ -15,4 +15,4 @@ jobs:
         with:
           # プロジェクト番号2（https://github.com/users/kikudesuyo/projects/2）を指定
           project-url: https://github.com/users/kikudesuyo/projects/2
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN }}
