@@ -1,7 +1,8 @@
-import os
-
 import requests
 from pydantic import BaseModel, ConfigDict, Field
+
+from utils.env_utils import get_required_env_var
+from utils.http_utils import AUTH_ENDPOINT, get_common_headers, ApiError
 
 
 class AuthReq(BaseModel):
@@ -20,28 +21,18 @@ class AuthRes(BaseModel):
 
 
 class AuthHandler:
+    """認証を処理するハンドラークラス"""
+
     def __init__(self):
         self.req = self.__new_req()
 
     def __new_req(self) -> AuthReq:
-        email = os.getenv("STUDYPLUS_EMAIL")
-        if not email:
-            raise ValueError(
-                "STUDYPLUS_EMAIL must be set in the environment variables."
-            )
-        password = os.getenv("STUDYPLUS_PASSWORD")
-        if not password:
-            raise ValueError(
-                "STUDYPLUS_PASSWORD must be set in the environment variables."
-            )
-        consumer_key = os.getenv("CONSUMER_KEY")
-        if not consumer_key:
-            raise ValueError("CONSUMER_KEY must be set in the environment variables.")
-        consumer_secret = os.getenv("CONSUMER_SECRET")
-        if not consumer_secret:
-            raise ValueError(
-                "CONSUMER_SECRET must be set in the environment variables."
-            )
+        """環境変数から認証リクエストオブジェクトを作成する"""
+        email = get_required_env_var("STUDYPLUS_EMAIL")
+        password = get_required_env_var("STUDYPLUS_PASSWORD")
+        consumer_key = get_required_env_var("CONSUMER_KEY")
+        consumer_secret = get_required_env_var("CONSUMER_SECRET")
+
         return AuthReq(
             consumer_key=consumer_key,
             consumer_secret=consumer_secret,
@@ -50,7 +41,7 @@ class AuthHandler:
         )
 
     def auth(self) -> AuthRes:
-        url = "https://api.studyplus.jp/2/client_auth"
+        """認証を実行し、アクセストークンを取得する"""
         payload = {
             "consumer_key": self.req.consumer_key,
             "consumer_secret": self.req.consumer_secret,
@@ -58,26 +49,14 @@ class AuthHandler:
             "username": self.req.email,
         }
 
-        headers = {
-            "Content-Type": "application/json; charset=utf-8",
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Client-Service": "Studyplus",
-            "Origin": "https://app.studyplus.jp",
-            "Referer": "https://app.studyplus.jp/",
-            "Sec-CH-UA": '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
-            "Sec-CH-UA-Mobile": "?0",
-            "Sec-CH-UA-Platform": '"macOS"',
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-site",
-            "Stpl-Client-Sp2": "1",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
-        }
+        headers = get_common_headers()
 
-        response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(AUTH_ENDPOINT, json=payload, headers=headers)
         if response.status_code == 200:
             return AuthRes(**response.json())
         else:
-            raise Exception(f"Error: {response.status_code} - {response.text}")
+            raise ApiError(
+                status_code=response.status_code,
+                message=response.text,
+                endpoint=AUTH_ENDPOINT,
+            )
