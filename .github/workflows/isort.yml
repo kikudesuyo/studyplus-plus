@@ -1,0 +1,28 @@
+name: isort Import Formatter
+
+on:
+  push:
+    paths:
+      - '**.py'
+  pull_request:
+    paths:
+      - '**.py'
+
+jobs:
+  isort:
+    name: isort Import Formatter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install isort
+        run: pip install isort
+
+      - name: Run isort
+        run: isort --check --diff src/

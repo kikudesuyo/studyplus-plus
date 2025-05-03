@@ -1,9 +1,10 @@
-import requests
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional, List
+from typing import Optional
 from urllib.parse import urlencode
 
-from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, get_auth_headers, ApiError
+import requests
+from pydantic import BaseModel, ConfigDict, Field
+
+from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, ApiError, get_auth_headers
 
 
 class BookshelfEntriesReq(BaseModel):
@@ -23,11 +24,10 @@ class BookshelfEntriesMaterial(BaseModel):
 
 
 class BookshelfEntriesStatus(BaseModel):
-    open: List[BookshelfEntriesMaterial]
-    in_progress: List[BookshelfEntriesMaterial]
-    closed: List[BookshelfEntriesMaterial]
-
-
+    open: Optional[list[BookshelfEntriesMaterial]] = None
+    in_progress: Optional[list[BookshelfEntriesMaterial]] = None
+    closed: Optional[list[BookshelfEntriesMaterial]] = None
+    
 class BookshelfEntriesRes(BaseModel):
     bookshelf_entries: BookshelfEntriesStatus
 
