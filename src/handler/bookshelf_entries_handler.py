@@ -1,6 +1,8 @@
+from typing import Optional
+
 import requests
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional
+
 
 class BookshelfEntriesReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
@@ -17,9 +19,9 @@ class BookshelfEntriesMaterial(BaseModel):
     material_image_url: Optional[str] = None
 
 class BookshelfEntriesStatus(BaseModel):
-    open: list[BookshelfEntriesMaterial]
-    in_progress: list[BookshelfEntriesMaterial]
-    closed: list[BookshelfEntriesMaterial]
+    open: Optional[list[BookshelfEntriesMaterial]] = None
+    in_progress: Optional[list[BookshelfEntriesMaterial]] = None
+    closed: Optional[list[BookshelfEntriesMaterial]] = None
     
 class BookshelfEntriesRes(BaseModel):
     bookshelf_entries: BookshelfEntriesStatus  
