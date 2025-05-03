@@ -1,7 +1,8 @@
-import requests
-from typing import Dict, Any
+from typing import Any, Dict
 
-from utils.http_utils import ME_ENDPOINT, get_auth_headers, ApiError
+import requests
+
+from utils.http_utils import ME_ENDPOINT, ApiError, get_auth_headers
 
 
 class MeHandler:

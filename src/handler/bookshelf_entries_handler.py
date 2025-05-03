@@ -27,7 +27,8 @@ class BookshelfEntriesStatus(BaseModel):
     open: Optional[list[BookshelfEntriesMaterial]] = None
     in_progress: Optional[list[BookshelfEntriesMaterial]] = None
     closed: Optional[list[BookshelfEntriesMaterial]] = None
-    
+
+
 class BookshelfEntriesRes(BaseModel):
     bookshelf_entries: BookshelfEntriesStatus
 
