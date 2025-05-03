@@ -8,11 +8,11 @@ from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, get_auth_headers, ApiEr
 
 class BookshelfEntriesReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
-    
+
     username: str = Field(..., alias="username")
-    include_categories: bool = Field(..., alias="include_categories") 
-    include_drill: bool = Field(..., alias="include_drill") 
-    
+    include_categories: bool = Field(..., alias="include_categories")
+    include_drill: bool = Field(..., alias="include_drill")
+
 
 class BookshelfEntriesMaterial(BaseModel):
     material_code: str
@@ -26,15 +26,15 @@ class BookshelfEntriesStatus(BaseModel):
     open: List[BookshelfEntriesMaterial]
     in_progress: List[BookshelfEntriesMaterial]
     closed: List[BookshelfEntriesMaterial]
-    
+
 
 class BookshelfEntriesRes(BaseModel):
-    bookshelf_entries: BookshelfEntriesStatus  
-    
+    bookshelf_entries: BookshelfEntriesStatus
+
 
 class BookshelfEntriesHandler:
     """本棚エントリーを取得するハンドラークラス"""
-    
+
     def __init__(self, access_token: str, username: str):
         self.access_token = access_token
         self.username = username
@@ -46,19 +46,19 @@ class BookshelfEntriesHandler:
             username=self.username,
             include_categories=True,
             include_drill=True,
-        )    
+        )
 
     def get_bookshelf_entries(self) -> BookshelfEntriesRes:
         """本棚エントリーを取得する"""
         params = {
             "username": self.username,
             "include_categories": "true",
-            "include_drill": "true"
+            "include_drill": "true",
         }
         url = f"{BOOKSHELF_ENTRIES_ENDPOINT}?{urlencode(params)}"
-        
+
         headers = get_auth_headers(self.access_token)
-        
+
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             return BookshelfEntriesRes(**response.json())
@@ -66,6 +66,5 @@ class BookshelfEntriesHandler:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=BOOKSHELF_ENTRIES_ENDPOINT
+                endpoint=BOOKSHELF_ENTRIES_ENDPOINT,
             )
-        

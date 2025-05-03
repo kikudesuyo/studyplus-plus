@@ -13,6 +13,8 @@ me_handler = MeHandler(auth_res.access_token)
 me = me_handler.get_me()
 print(f"ユーザー情報: {me}")
 
-bookshelf_entries_handler = BookshelfEntriesHandler(auth_res.access_token, auth_res.username)
+bookshelf_entries_handler = BookshelfEntriesHandler(
+    auth_res.access_token, auth_res.username
+)
 bookshelf_entries_res = bookshelf_entries_handler.get_bookshelf_entries()
 print(f"本棚エントリー: {bookshelf_entries_res}")
