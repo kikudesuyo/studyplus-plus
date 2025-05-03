@@ -19,23 +19,23 @@ class StudyRecordReq(BaseModel):
 
 
 class StudyChallengePeriod(BaseModel):
-    start_date: str
-    end_date: str
+    start_date: Optional[str]
+    end_date: Optional[str]
 
 
 class StudyChallenge(BaseModel):
-    challenge_period: StudyChallengePeriod
-    challenge_duration: int
-    prev_duration: int
-    duration: int
-    prev_ratio: int
-    ratio: int
+    challenge_period: Optional[StudyChallengePeriod] = None
+    challenge_duration: Optional[int] = None
+    prev_duration: Optional[int] = None
+    duration: Optional[int] = None
+    prev_ratio: Optional[int] = None
+    ratio: Optional[int] = None
 
 
 class StudyRecordRes(BaseModel):
     record_id: int
-    connection_result: Dict[str, Any] = {}
-    status: str = ""
+    connection_result: Optional[Dict[str, Any]] = {}
+    status: Optional[str] = ""
     study_challenge: Optional[StudyChallenge] = None
 
 
