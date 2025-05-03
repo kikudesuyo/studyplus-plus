@@ -1,5 +1,6 @@
 import requests
 from pydantic import BaseModel, ConfigDict, Field
+from typing import Optional
 
 class BookshelfEntriesReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
@@ -10,10 +11,10 @@ class BookshelfEntriesReq(BaseModel):
     
 class BookshelfEntriesMaterial(BaseModel):
     material_code: str
-    user_category_id: int
+    user_category_id: Optional[int] = None
     category_name: str
     material_title: str
-    material_image_url: str
+    material_image_url: Optional[str] = None
 
 class BookshelfEntriesStatus(BaseModel):
     open: list[BookshelfEntriesMaterial]
