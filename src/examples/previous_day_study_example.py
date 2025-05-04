@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 
 from handler.auth_handler import AuthHandler
-from handler.previous_day_study_handler import record_previous_day_study_for_material
+from handler.previous_day_study_handler import \
+    record_previous_day_study_for_material
 
 load_dotenv()
 
@@ -13,7 +14,7 @@ study_record_res = record_previous_day_study_for_material(
     access_token=auth_res.access_token,
     username=auth_res.username,
     duration=3600,  # 1 hour
-    comment="前日の勉強記録（自動的に23:59に設定）"
+    comment="前日の勉強記録（自動的に23:59に設定）",
 )
 
 if study_record_res:
