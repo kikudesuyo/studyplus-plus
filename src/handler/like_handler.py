@@ -3,8 +3,12 @@ from typing import Any, Dict, List, Optional
 import requests
 from pydantic import BaseModel, Field
 
-from utils.http_utils import (BASE_URL, TIMELINE_FEEDS_ENDPOINT, ApiError,
-                              get_auth_headers)
+from utils.http_utils import (
+    BASE_URL,
+    TIMELINE_FEEDS_ENDPOINT,
+    ApiError,
+    get_auth_headers,
+)
 
 
 class LikePostReq(BaseModel):
