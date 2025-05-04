@@ -4,8 +4,7 @@ from urllib.parse import urlencode
 import requests
 from pydantic import BaseModel, ConfigDict, Field
 
-from utils.http_utils import (BOOKSHELF_ENTRIES_ENDPOINT, ApiError,
-                              get_auth_headers)
+from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, ApiError, get_auth_headers
 
 
 class BookshelfEntriesReq(BaseModel):
