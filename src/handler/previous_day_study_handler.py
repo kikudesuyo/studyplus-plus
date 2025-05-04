@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from handler.bookshelf_entries_handler import (BookshelfEntriesHandler,
-                                               BookshelfEntriesMaterial,
-                                               BookshelfEntriesRes)
+from handler.bookshelf_entries_handler import (
+    BookshelfEntriesHandler,
+    BookshelfEntriesMaterial,
+    BookshelfEntriesRes,
+)
 from handler.study_records_handler import StudyRecordRes, StudyRecordsHandler
 
 

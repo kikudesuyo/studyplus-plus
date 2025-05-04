@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 
 from handler.auth_handler import AuthHandler
-from handler.previous_day_study_handler import \
-    record_previous_day_study_for_material
+from handler.previous_day_study_handler import record_previous_day_study_for_material
 
 load_dotenv()
 
