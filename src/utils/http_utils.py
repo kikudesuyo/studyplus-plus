@@ -4,6 +4,7 @@ BASE_URL = "https://api.studyplus.jp/2"
 AUTH_ENDPOINT = f"{BASE_URL}/client_auth"
 ME_ENDPOINT = f"{BASE_URL}/me"
 BOOKSHELF_ENTRIES_ENDPOINT = f"{BASE_URL}/bookshelf_entries"
+TIMELINE_FEEDS_ENDPOINT = f"{BASE_URL}/timeline_feeds/followee"
 
 
 def get_common_headers() -> Dict[str, str]:

@@ -25,8 +25,24 @@ def main():
     study_parser.add_argument("--comment", help="コメント")
 
     like_parser = subparsers.add_parser("like", help="投稿にいいねする")
-    like_parser.add_argument("--username", required=True, help="いいねするユーザー名")
-    like_parser.add_argument(
+    like_subparsers = like_parser.add_subparsers(
+        dest="like_type", help="いいねのタイプ"
+    )
+
+    user_like_parser = like_subparsers.add_parser(
+        "user", help="特定ユーザーの投稿にいいねする"
+    )
+    user_like_parser.add_argument(
+        "--username", required=True, help="いいねするユーザー名"
+    )
+    user_like_parser.add_argument(
+        "--count", type=int, default=5, help="いいねする投稿数（デフォルト: 5）"
+    )
+
+    timeline_like_parser = like_subparsers.add_parser(
+        "timeline", help="タイムラインの投稿にいいねする"
+    )
+    timeline_like_parser.add_argument(
         "--count", type=int, default=5, help="いいねする投稿数（デフォルト: 5）"
     )
 
@@ -65,15 +81,29 @@ def main():
 
     elif args.command == "like":
         like_handler = LikeHandler(auth_res.access_token)
-        print(f"{args.username}の最新{args.count}件の投稿にいいねします...")
-        results = like_handler.like_user_latest_posts(args.username, args.count)
 
-        success_count = sum(1 for result in results if result.success)
-        print(f"いいね完了: {success_count}/{len(results)}件")
+        if not hasattr(args, "like_type") or args.like_type is None:
+            like_parser.print_help()
+        elif args.like_type == "user":
+            print(f"{args.username}の最新{args.count}件の投稿にいいねします...")
+            results = like_handler.like_user_latest_posts(args.username, args.count)
 
-        for i, result in enumerate(results):
-            if not result.success and result.message:
-                print(f"投稿 {i+1}: {result.message}")
+            success_count = sum(1 for result in results if result.success)
+            print(f"いいね完了: {success_count}/{len(results)}件")
+
+            for i, result in enumerate(results):
+                if not result.success and result.message:
+                    print(f"投稿 {i+1}: {result.message}")
+        elif args.like_type == "timeline":
+            print(f"タイムラインの最新{args.count}件の投稿にいいねします...")
+            results = like_handler.like_timeline_posts(args.count)
+
+            success_count = sum(1 for result in results if result.success)
+            print(f"いいね完了: {success_count}/{len(results)}件")
+
+            for i, result in enumerate(results):
+                if not result.success and result.message:
+                    print(f"投稿 {i+1}: {result.message}")
 
 
 if __name__ == "__main__":
