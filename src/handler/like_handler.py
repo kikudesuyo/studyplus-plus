@@ -1,4 +1,5 @@
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+
 import requests
 from pydantic import BaseModel
 
@@ -54,10 +55,12 @@ class LikeHandler:
                 endpoint=url,
             )
 
-    def like_user_latest_posts(self, username: str, count: int = 5) -> List[LikePostRes]:
+    def like_user_latest_posts(
+        self, username: str, count: int = 5
+    ) -> List[LikePostRes]:
         """特定のユーザーの最新の投稿にいいねする"""
         user_posts = self.get_user_posts(username, limit=count)
-        
+
         results = []
         for post in user_posts.posts:
             post_id = post.get("id")
@@ -67,5 +70,5 @@ class LikeHandler:
                     results.append(result)
                 except ApiError as e:
                     results.append(LikePostRes(success=False, message=str(e)))
-        
+
         return results
