@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 BASE_URL = "https://api.studyplus.jp/2"
 AUTH_ENDPOINT = f"{BASE_URL}/client_auth"

@@ -2,7 +2,7 @@ import requests
 from pydantic import BaseModel, ConfigDict, Field
 
 from utils.env_utils import get_required_env_var
-from utils.http_utils import AUTH_ENDPOINT, get_common_headers, ApiError
+from utils.http_utils import AUTH_ENDPOINT, ApiError, get_common_headers
 
 
 class AuthReq(BaseModel):
