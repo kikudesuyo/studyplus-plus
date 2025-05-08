@@ -1,7 +1,6 @@
 from typing import Any, Dict
 
 import requests
-
 from utils.http_utils import ME_ENDPOINT, ApiError, get_auth_headers
 
 
