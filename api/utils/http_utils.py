@@ -4,8 +4,18 @@ BASE_URL = "https://api.studyplus.jp/2"
 AUTH_ENDPOINT = f"{BASE_URL}/client_auth"
 ME_ENDPOINT = f"{BASE_URL}/me"
 BOOKSHELF_ENTRIES_ENDPOINT = f"{BASE_URL}/bookshelf_entries"
+
+
 FOLLOWEE_ENDPOINT = f"{BASE_URL}/timeline_feeds/followee"
 STUDY_RECORDS_ENDPOINT = f"{BASE_URL}/study_records"
+
+
+def like_endpoint(event_id):
+    return f"{BASE_URL}/timeline_events/{event_id}/likes/like"
+
+
+def unlike_endpoint(event_id):
+    return f"{BASE_URL}/timeline_events/{event_id}/likes/withdraw"
 
 
 def get_common_headers() -> Dict[str, str]:
