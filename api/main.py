@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-
 from handler.auth_handler import AuthHandler
 from handler.bookshelf_entries_handler import BookshelfEntriesHandler
 from handler.me_handler import MeHandler
@@ -24,7 +23,7 @@ print(f"本棚エントリー: {bookshelf_entries_res}")
 study_records_handler = StudyRecordsHandler(auth_res.access_token)
 study_records_res = study_records_handler.create_study_record(
     material_code="ASIN4861103525",
-    duration=36000,
-    comment="頑張ったゔぃん",
+    duration=60,
+    comment="test comment",
 )
 print(study_records_res)

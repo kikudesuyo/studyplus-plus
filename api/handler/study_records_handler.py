@@ -14,8 +14,8 @@ class StudyRecordReq(BaseModel):
     post_token: str = Field(..., alias="post_token")
     record_datetime: str = Field(..., alias="record_datetime")
     comment: Optional[str] = Field(None, alias="comment")
-    runtimeType: str = Field("default", alias="runtimeType")
-    study_source_type: str = Field("studyplus", alias="study_source_type")
+    runtimeType: str = Field(..., alias="runtimeType")
+    study_source_type: str = Field(..., alias="study_source_type")
 
 
 class StudyChallengePeriod(BaseModel):
@@ -91,6 +91,8 @@ class StudyRecordsHandler:
             post_token=post_token,
             record_datetime=record_datetime,
             comment=comment,
+            runtimeType="default",
+            study_source_type="studyplus",
         )
 
         url = "https://api.studyplus.jp/2/study_records"
