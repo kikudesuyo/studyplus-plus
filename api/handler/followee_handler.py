@@ -1,0 +1,86 @@
+from typing import List, Optional
+from urllib.parse import urlencode
+
+import requests
+from pydantic import BaseModel, Field
+from utils.http_utils import FOLLOWEE_ENDPOINT, ApiError, get_auth_headers
+
+
+class FolloweeReq(BaseModel):
+    until: str = Field(..., alias="until")
+
+
+class BodyStudyRecord(BaseModel):
+    event_id: int
+    event_type: str
+    username: str
+    nickname: str
+    badge_type: str
+    user_image_url: str
+    like_count: int
+    if_you_like: bool
+    comment_count: int
+    posted_at: str
+    material_type: str
+    material_code: str
+    material_title: str
+    material_image_url: str
+    material_image_preset_name: Optional[str] = None
+    record_id: int
+    record_comment: str
+    unit: str
+    amount: int
+    duration: int
+    record_date: str
+    record_datetime: str
+    record_start: str
+    images: List[str]
+    tags: List[str]
+    study_source_type: str
+
+
+class Feed(BaseModel):
+    feed_type: str
+    body_study_record: Optional[BodyStudyRecord] = None
+
+
+class FolloweeRes(BaseModel):
+    current: str
+    next: str
+    feeds: List[Feed]
+
+
+class FolloweeHandler:
+    """フォロワーの学習記録を取得するハンドラークラス
+
+    until: str
+        フォーマット:
+            "1748323851_2297584462" のような形式。
+            最初の教材記録のID_最後の教材記録のID
+
+        初回のリクエストではクエリパラメータは不要
+        より過去の記録を取得したい場合は、前回のレスポンスに含まれる `next` の値を、
+        次回のリクエストの `until` パラメータとして指定することで、続きの記録を取得できる。
+    """
+
+    def __init__(self, access_token: str, until: str):
+        self.access_token = access_token
+        self.req = FolloweeReq(until=until)
+
+    def get_followee(self) -> FolloweeRes:
+        """フォロワーのフィードを取得する"""
+        params = {
+            "until": self.req.until,
+        }
+
+        url = f"{FOLLOWEE_ENDPOINT}?{urlencode(params)}"
+        headers = get_auth_headers(self.access_token)
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return FolloweeRes(**response.json())
+        else:
+            raise ApiError(
+                status_code=response.status_code,
+                message=response.text,
+                endpoint=url,
+            )
