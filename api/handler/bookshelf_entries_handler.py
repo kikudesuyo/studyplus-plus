@@ -50,12 +50,7 @@ class BookshelfEntriesHandler:
 
     def get_bookshelf_entries(self) -> BookshelfEntriesRes:
         """本棚エントリーを取得する"""
-        params = {
-            "username": self.username,
-            "include_categories": "true",
-            "include_drill": "true",
-        }
-        url = f"{BOOKSHELF_ENTRIES_ENDPOINT}?{urlencode(params)}"
+        url = f"{BOOKSHELF_ENTRIES_ENDPOINT}?{urlencode(self.req.model_dump(by_alias=True))}"
 
         headers = get_auth_headers(self.access_token)
 

@@ -27,16 +27,11 @@ class AuthHandler:
 
     def __new_req(self) -> AuthReq:
         """環境変数から認証リクエストオブジェクトを作成する"""
-        email = get_required_env_var("DEV_STUDYPLUS_EMAIL")
-        password = get_required_env_var("DEV_STUDYPLUS_PASSWORD")
-        consumer_key = get_required_env_var("CONSUMER_KEY")
-        consumer_secret = get_required_env_var("CONSUMER_SECRET")
-
         return AuthReq(
-            consumer_key=consumer_key,
-            consumer_secret=consumer_secret,
-            password=password,
-            email=email,  # pyright: ignore
+            consumer_key=get_required_env_var("CONSUMER_KEY"),
+            consumer_secret=get_required_env_var("CONSUMER_SECRET"),
+            password=get_required_env_var("DEV_STUDYPLUS_PASSWORD"),
+            email=get_required_env_var("DEV_STUDYPLUS_EMAIL"),  # pyright: ignore
         )
 
     def auth(self) -> AuthRes:
