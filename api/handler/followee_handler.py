@@ -51,7 +51,7 @@ class FolloweeRes(BaseModel):
 
 
 class FolloweeHandler:
-    """フォロワーの学習記録を取得するハンドラークラス
+    """フォロー中のユーザーの学習記録を取得するハンドラークラス
 
     until: str
         フォーマット:
@@ -67,8 +67,8 @@ class FolloweeHandler:
         self.access_token = access_token
         self.req = FolloweeReq(until=until)
 
-    def get_followee(self) -> FolloweeRes:
-        """フォロワーのフィードを取得する"""
+    def get_followee_study_records(self) -> FolloweeRes:
+        """フォロー中のユーザーの学習記録を取得する"""
         params = {
             "until": self.req.until,
         }
