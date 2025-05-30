@@ -68,7 +68,6 @@ class TimelineFeedsHandler:
         次回のリクエストの `until` パラメータとして指定することで、続きの記録を取得できる。
         """
         req = FolloweeReq(until=until)
-
         url = f"{FOLLOWEE_ENDPOINT}?{urlencode(req.model_dump(by_alias=True))}"
         response = requests.get(url, headers=self.headers)
         if response.status_code == 200:

@@ -4,6 +4,7 @@ from typing import Any, Dict, Optional
 
 import requests
 from pydantic import BaseModel, ConfigDict, Field
+from utils.http_utils import STUDY_RECORDS_ENDPOINT, get_auth_headers
 
 
 class StudyRecordReq(BaseModel):
@@ -42,6 +43,7 @@ class StudyRecordRes(BaseModel):
 class StudyRecordsHandler:
     def __init__(self, access_token: str):
         self.access_token = access_token
+        self.headers = get_auth_headers(access_token)
 
     def _generate_post_token(self) -> str:
         """
@@ -73,7 +75,7 @@ class StudyRecordsHandler:
             material_code: 教材ID
             duration: 勉強時間（秒）
             comment: コメント（オプション）
-            post_token: ポストトークン（指定されない場合は自動生成）
+            post_token: ポストトークン（UUIDで生成）
             record_datetime: 記録日時（指定されない場合は現在時刻）
 
         Returns:
@@ -95,39 +97,9 @@ class StudyRecordsHandler:
             study_source_type="studyplus",
         )
 
-        url = "https://api.studyplus.jp/2/study_records"
-        headers = {
-            "accept": "*/*",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "en-US,en;q=0.9",
-            "authorization": f"OAuth {self.access_token}",
-            "client-service": "Studyplus",
-            "content-type": "application/json; charset=utf-8",
-            "origin": "https://app.studyplus.jp",
-            "referer": "https://app.studyplus.jp/",
-            "sec-ch-ua": '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"macOS"',
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-site",
-            "stpl-client-sp2": "1",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-        }
-
-        payload = {
-            "material_code": req.material_code,
-            "duration": req.duration,
-            "post_token": req.post_token,
-            "record_datetime": req.record_datetime,
-            "runtimeType": req.runtimeType,
-            "study_source_type": req.study_source_type,
-        }
-
-        if req.comment:
-            payload["comment"] = req.comment
-
-        response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(
+            STUDY_RECORDS_ENDPOINT, json=req.model_dump(), headers=self.headers
+        )
         if response.status_code == 200:
             return StudyRecordRes(**response.json())
         else:

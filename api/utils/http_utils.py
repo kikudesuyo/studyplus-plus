@@ -5,6 +5,7 @@ AUTH_ENDPOINT = f"{BASE_URL}/client_auth"
 ME_ENDPOINT = f"{BASE_URL}/me"
 BOOKSHELF_ENTRIES_ENDPOINT = f"{BASE_URL}/bookshelf_entries"
 FOLLOWEE_ENDPOINT = f"{BASE_URL}/timeline_feeds/followee"
+STUDY_RECORDS_ENDPOINT = f"{BASE_URL}/study_records"
 
 
 def get_common_headers() -> Dict[str, str]:
