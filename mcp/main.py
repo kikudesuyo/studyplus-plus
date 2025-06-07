@@ -3,8 +3,8 @@ import asyncio
 from fastmcp import Client
 from google import genai
 
-# client = genai.Client(api_key="AIzaSyDHIfE1DFylXt2xB9rfV80jZHOMQo_N3VY")
-# export GEMINI_API_KEY="AIzaSyDHIfE1DFylXt2xB9rfV80jZHOMQo_N3VY"
+# client = genai.Client(api_key="your-api-key")
+# export GEMINI_API_KEY="your-api-key"
 
 mcp_client = Client("./mcp/server.py")
 gemini_client = genai.Client()
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 
-# client = genai.Client(api_key="AIzaSyDHIfE1DFylXt2xB9rfV80jZHOMQo_N3VY")
+# client = genai.Client(api_key="your-api-key")
 
 # response = client.models.generate_content(
 #     model="gemini-2.0-flash", contents="Explain how AI works in a few words"
