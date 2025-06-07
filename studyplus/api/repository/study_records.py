@@ -1,0 +1,89 @@
+import uuid
+from datetime import datetime
+from typing import Optional
+
+import requests
+from pydantic import BaseModel, ConfigDict, Field
+from utils.http_utils import STUDY_RECORDS_ENDPOINT, get_auth_headers
+
+from studyplus.api.model.study_records_model import StudyRecordModel
+
+
+class StudyRecordRepositoryReq(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
+    material_code: str = Field(..., alias="material_code")
+    duration: int = Field(..., alias="duration")
+    post_token: str = Field(..., alias="post_token")
+    record_datetime: str = Field(..., alias="record_datetime")
+    comment: Optional[str] = Field(None, alias="comment")
+    runtimeType: str = Field(..., alias="runtimeType")
+    study_source_type: str = Field(..., alias="study_source_type")
+
+
+class StudyRecordsRepository:
+    def __init__(self, access_token: str):
+        self.access_token = access_token
+        self.headers = get_auth_headers(access_token)
+
+    def _generate_post_token(self) -> str:
+        """
+        UUIDを生成して文字列形式で返します。
+        例: "7160a019-d73b-483b-ad75-3f9e850ea9e6"
+        """
+        return str(uuid.uuid4())
+
+    def _get_current_datetime_iso(self) -> str:
+        """
+        現在の日時をISO形式で返します。
+        例: "2025-05-03T23:31:37.623+09:00"
+        """
+        now = datetime.now().astimezone()
+        return now.isoformat()
+
+    def create_study_record(
+        self,
+        material_code: str,
+        duration: int,
+        comment: Optional[str] = None,
+        post_token: Optional[str] = None,
+        record_datetime: Optional[str] = None,
+    ) -> StudyRecordModel:
+        """
+        勉強記録を作成します。
+
+        Args:
+            material_code: 教材ID
+            duration: 勉強時間（秒）
+            comment: コメント（オプション）
+            post_token: ポストトークン（UUIDで生成）
+            record_datetime: 記録日時（指定されない場合は現在時刻）
+
+        Returns:
+            StudyRecordRes: APIレスポンス
+        """
+        if not post_token:
+            post_token = self._generate_post_token()
+
+        if not record_datetime:
+            record_datetime = self._get_current_datetime_iso()
+
+        req = StudyRecordRepositoryReq(
+            material_code=material_code,
+            duration=duration,
+            post_token=post_token,
+            record_datetime=record_datetime,
+            comment=comment,
+            runtimeType="default",
+            study_source_type="studyplus",
+        )
+
+        response = requests.post(
+            STUDY_RECORDS_ENDPOINT, json=req.model_dump(), headers=self.headers
+        )
+        if response.status_code == 200:
+            return StudyRecordModel(**response.json())
+        else:
+            raise Exception(
+                f"Failed to create study record: {response.status_code} - {response.text}"
+            )

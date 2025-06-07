@@ -14,7 +14,7 @@ def like_endpoint(event_id):
     return f"{BASE_URL}/timeline_events/{event_id}/likes/like"
 
 
-def unlike_endpoint(event_id):
+def withdraw_like_endpoint(event_id):
     return f"{BASE_URL}/timeline_events/{event_id}/likes/withdraw"
 
 

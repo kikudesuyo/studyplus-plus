@@ -1,29 +1,25 @@
-import requests
-from utils.http_utils import ApiError, get_auth_headers, like_endpoint, unlike_endpoint
+from studyplus.api.repository.timeline_events import TimelineEventsRepository
 
 
-class TimelineEventsHandler:
-    def __init__(self, access_token):
-        self.headers = get_auth_headers(access_token)
+def like(access_token: str, event_id: str) -> None:
+    """
+    タイムラインイベントにいいねをする関数
 
-    def like(self, event_id: int) -> None:
-        """イベントにいいねをする"""
-        url = like_endpoint(event_id)
-        response = requests.post(url, headers=self.headers)
-        if response.status_code != 200:
-            raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
-                endpoint=url,
-            )
+    Args:
+        access_token: アクセストークン
+        event_id: イベントID
+    """
+    timeline_events_repo = TimelineEventsRepository(access_token)
+    timeline_events_repo.like(event_id=int(event_id))
 
-    def unlike(self, event_id: int) -> None:
-        """イベントのいいねを取り消す"""
-        url = unlike_endpoint(event_id)
-        response = requests.post(url, headers=self.headers)
-        if response.status_code != 200:
-            raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
-                endpoint=url,
-            )
+
+def withdraw_like(access_token: str, event_id: str) -> None:
+    """
+    タイムラインイベントのいいねを取り消す関数
+
+    Args:
+        access_token: アクセストークン
+        event_id: イベントID
+    """
+    timeline_events_repo = TimelineEventsRepository(access_token)
+    timeline_events_repo.withdraw_like(event_id=int(event_id))

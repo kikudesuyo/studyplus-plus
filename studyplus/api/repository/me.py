@@ -4,7 +4,7 @@ import requests
 from utils.http_utils import ME_ENDPOINT, ApiError, get_auth_headers
 
 
-class MeHandler:
+class MeRepository:
     """ユーザー情報を取得するハンドラークラス"""
 
     def __init__(self, access_token: str):
