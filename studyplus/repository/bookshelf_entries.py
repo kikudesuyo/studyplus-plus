@@ -1,10 +1,9 @@
 from urllib.parse import urlencode
 
 import requests
+from model.bookshelf_entries_model import BookshelfEntriesModel
 from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, ApiError, get_auth_headers
-
-from studyplus.api.model.bookshelf_entries_model import BookshelfEntriesModel
 
 
 class BookshelfEntriesRepositoryReq(BaseModel):

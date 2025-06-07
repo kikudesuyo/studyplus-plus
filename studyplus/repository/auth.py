@@ -1,9 +1,8 @@
 import requests
+from model.auth_model import AuthModel
 from pydantic import BaseModel, ConfigDict, Field
 from utils.env_utils import get_required_env_var
 from utils.http_utils import AUTH_ENDPOINT, ApiError, get_common_headers
-
-from studyplus.api.model.auth_model import AuthModel
 
 
 class AuthRepositoryReq(BaseModel):
@@ -12,31 +11,19 @@ class AuthRepositoryReq(BaseModel):
     consumer_key: str = Field(..., alias="consumer_key")
     consumer_secret: str = Field(..., alias="consumer_secret")
     password: str = Field(..., alias="password")
-    email: str = Field(..., alias="username")
+    username: str = Field(..., alias="username")
 
 
 class AuthRepository:
     """認証を処理するハンドラークラス"""
 
-    def __init__(self):
-        self.req = self.__new_req()
-
-    def __new_req(self) -> AuthRepositoryReq:
-        """環境変数から認証リクエストオブジェクトを作成する"""
-        return AuthRepositoryReq(
-            consumer_key=get_required_env_var("CONSUMER_KEY"),
-            consumer_secret=get_required_env_var("CONSUMER_SECRET"),
-            password=get_required_env_var("DEV_STUDYPLUS_PASSWORD"),
-            email=get_required_env_var("DEV_STUDYPLUS_EMAIL"),  # pyright: ignore
-        )
-
-    def auth(self) -> AuthModel:
+    def auth(self, req_param: AuthRepositoryReq) -> AuthModel:
         """認証を実行し、アクセストークンを取得する"""
         payload = {
-            "consumer_key": self.req.consumer_key,
-            "consumer_secret": self.req.consumer_secret,
-            "password": self.req.password,
-            "username": self.req.email,
+            "consumer_key": req_param.consumer_key,
+            "consumer_secret": req_param.consumer_secret,
+            "password": req_param.password,
+            "username": req_param.username,
         }
 
         headers = get_common_headers()

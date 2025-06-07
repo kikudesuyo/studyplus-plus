@@ -1,7 +1,4 @@
-from studyplus.api.repository.study_records import (
-    StudyRecordRepositoryRes,
-    StudyRecordsRepository,
-)
+from repository.study_records import StudyRecordRepositoryRes, StudyRecordsRepository
 
 
 def create_study_record(

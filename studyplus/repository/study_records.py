@@ -3,10 +3,9 @@ from datetime import datetime
 from typing import Optional
 
 import requests
+from model.study_records_model import StudyRecordModel
 from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import STUDY_RECORDS_ENDPOINT, get_auth_headers
-
-from studyplus.api.model.study_records_model import StudyRecordModel
 
 
 class StudyRecordRepositoryReq(BaseModel):

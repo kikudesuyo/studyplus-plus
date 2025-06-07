@@ -1,7 +1,4 @@
-from studyplus.api.repository.timeline_feeds import (
-    FolloweeModel,
-    TimelineFeedsRepository,
-)
+from repository.timeline_feeds import FolloweeModel, TimelineFeedsRepository
 
 
 def get_followee_timeline_feeds(access_token: str, until) -> FolloweeModel:

@@ -1,4 +1,4 @@
-from studyplus.api.repository.bookshelf_entries import (
+from repository.bookshelf_entries import (
     BookshelfEntriesRepository,
     BookshelfEntriesRepositoryRes,
 )

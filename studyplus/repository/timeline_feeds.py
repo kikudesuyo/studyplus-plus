@@ -1,10 +1,9 @@
 from urllib.parse import urlencode
 
 import requests
+from model.timeline_feeds_model import FolloweeModel
 from pydantic import BaseModel, Field
 from utils.http_utils import FOLLOWEE_ENDPOINT, ApiError, get_auth_headers
-
-from studyplus.api.model.timeline_feeds_model import FolloweeModel
 
 
 class FolloweeRepositoryReq(BaseModel):

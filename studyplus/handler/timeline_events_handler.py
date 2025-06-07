@@ -1,4 +1,4 @@
-from studyplus.api.repository.timeline_events import TimelineEventsRepository
+from repository.timeline_events import TimelineEventsRepository
 
 
 def like(access_token: str, event_id: str) -> None:
