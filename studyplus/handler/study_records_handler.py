@@ -1,4 +1,5 @@
-from repository.study_records import StudyRecordRepositoryRes, StudyRecordsRepository
+from model.study_records_model import StudyRecordModel
+from repository.study_records import StudyRecordsRepository
 
 
 def create_study_record(
@@ -8,7 +9,7 @@ def create_study_record(
     comment: str,
     post_token: str,
     record_datetime: str,
-) -> StudyRecordRepositoryRes:
+) -> StudyRecordModel:
     """
     勉強記録を作成する関数
 

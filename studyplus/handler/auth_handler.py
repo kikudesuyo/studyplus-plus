@@ -1,4 +1,5 @@
 from fastapi import HTTPException, status
+from model.auth_model import AuthModel
 from pydantic import BaseModel, EmailStr, Field
 from repository.auth import AuthRepository, AuthRepositoryReq
 from utils.env_utils import get_required_env_var
@@ -15,7 +16,7 @@ class AuthHandlerReq(BaseModel):
     )
 
 
-def get_auth(credentials: AuthHandlerReq):
+def get_auth(credentials: AuthHandlerReq) -> AuthModel:
     """
     ユーザー認証を行い、アクセストークンを取得します。
 
