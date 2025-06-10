@@ -1,5 +1,5 @@
 services:
-  studyplus-backend:
+  studyplus-api:
     build:
       context: .
       dockerfile: studyplus/Dockerfile
