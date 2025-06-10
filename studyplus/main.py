@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import r
 
+load_dotenv()
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -13,6 +15,3 @@ app.add_middleware(
 )
 
 app.include_router(r)
-
-
-load_dotenv()

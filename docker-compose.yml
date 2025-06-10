@@ -1,0 +1,9 @@
+services:
+  studyplus-backend:
+    build:
+      context: .
+      dockerfile: studyplus/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
