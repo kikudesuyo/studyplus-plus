@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 import requests
 from model.bookshelf_entries_model import BookshelfEntriesModel
 from pydantic import BaseModel, ConfigDict, Field
