@@ -3,6 +3,8 @@ GCP_PROJECT_ID = studyplus-plus
 GCP_REGION = asia-northeast1
 REPO_NAME = studyplus-plus
 
+STUDYPLUS_ENV_FILE = studyplus-prod.yml
+
 # サービス定義
 STUDYPLUS_SERVICE = studyplus-api
 STUDYPLUS_IMAGE = $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT_ID)/$(REPO_NAME)/$(STUDYPLUS_SERVICE)
@@ -26,7 +28,7 @@ setup-gcp:
 .PHONY: push-studyplus deploy-studyplus
 
 push-studyplus:
-	docker build -f studyplus/Dockerfile -t $(STUDYPLUS_IMAGE) .
+	docker build --platform linux/amd64 -f studyplus/Dockerfile -t $(STUDYPLUS_IMAGE) .
 	docker push $(STUDYPLUS_IMAGE)
 
 deploy-studyplus:
@@ -35,6 +37,7 @@ deploy-studyplus:
 		--region $(GCP_REGION) \
 		--project $(GCP_PROJECT_ID) \
 		--allow-unauthenticated \
+		--env-vars-file=$(STUDYPLUS_ENV_FILE) \
 
 studyplus-all: push-studyplus deploy-studyplus
 
