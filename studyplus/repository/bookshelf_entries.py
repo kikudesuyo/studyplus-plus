@@ -21,6 +21,7 @@ class BookshelfEntriesRepository:
         self.access_token = access_token
         self.username = username
         self.req = self.__new_req()
+        self.headers = get_auth_headers(access_token)
 
     def __new_req(self) -> BookshelfEntriesRepositoryReq:
         """リクエストオブジェクトを作成する"""
@@ -33,11 +34,9 @@ class BookshelfEntriesRepository:
     def get_bookshelf_entries(self) -> BookshelfEntriesModel:
         """本棚エントリーを取得する"""
         endpoint = f"{BASE_URL}/bookshelf_entries"
-        url = f"{endpoint}?{urlencode(self.req.model_dump(by_alias=True))}"
+        param = self.req.model_dump(by_alias=True)
 
-        headers = get_auth_headers(self.access_token)
-
-        response = requests.get(url, headers=headers)
+        response = requests.get(endpoint, headers=self.headers, params=param)
         if response.status_code == 200:
             return BookshelfEntriesModel(**response.json())
         else:
@@ -45,4 +44,5 @@ class BookshelfEntriesRepository:
                 status_code=response.status_code,
                 message=response.text,
                 endpoint=endpoint,
+                query=param,
             )

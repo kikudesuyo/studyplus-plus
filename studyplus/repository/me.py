@@ -9,12 +9,13 @@ class MeRepository:
 
     def __init__(self, access_token: str):
         self.access_token = access_token
+        self.headers = get_auth_headers(access_token)
 
     def get_me(self) -> Dict[str, Any]:
         """現在のユーザー情報を取得する"""
         endpoint = f"{BASE_URL}/me"
-        headers = get_auth_headers(self.access_token)
-        response = requests.get(endpoint, headers=headers)
+
+        response = requests.get(endpoint, headers=self.headers)
 
         if response.status_code == 200:
             return response.json()

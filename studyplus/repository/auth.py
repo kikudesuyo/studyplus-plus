@@ -16,6 +16,9 @@ class AuthRepositoryReq(BaseModel):
 class AuthRepository:
     """認証を処理するハンドラークラス"""
 
+    def __init__(self):
+        self.headers = get_common_headers()
+
     def auth(self, req_param: AuthRepositoryReq) -> AuthModel:
         """認証を実行し、アクセストークンを取得する"""
         endpoint = f"{BASE_URL}/client_auth"
@@ -25,8 +28,8 @@ class AuthRepository:
             "password": req_param.password,
             "username": req_param.username,
         }
-        headers = get_common_headers()
-        response = requests.post(endpoint, json=payload, headers=headers)
+
+        response = requests.post(endpoint, json=payload, headers=self.headers)
         if response.status_code == 200:
             return AuthModel(**response.json())
         else:
