@@ -58,6 +58,22 @@ def create_db():
     conn.close()
 
 
+def add_user():
+    dbname = "studyplus-plus.db"
+    conn = sqlite3.connect(dbname)
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO user (studyplus_user_id, name) VALUES (?, ?)
+        """,
+        (4, "新しいユーザー"),
+    )
+    conn.commit()
+    conn.close()
+    logging.info("User added successfully.")
+    print("User added successfully.")
+
+
 def read_db():
     logging.info(f"Current directory: {os.getcwd()}")
     logging.info(f"Directory contents: {os.listdir(os.getcwd())}")
@@ -76,6 +92,7 @@ def read_db():
 r = APIRouter()
 r.add_api_route("/read", read_db, methods=["GET"])
 r.add_api_route("/create", create_db, methods=["POST"])
+r.add_api_route("/add_user", add_user, methods=["POST"])
 
 
 app.include_router(r)
