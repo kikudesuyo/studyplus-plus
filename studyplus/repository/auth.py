@@ -1,7 +1,7 @@
 import requests
 from model.auth_model import AuthModel
 from pydantic import BaseModel, ConfigDict, Field
-from utils.http_utils import AUTH_ENDPOINT, ApiError, get_common_headers
+from utils.http_utils import BASE_URL, ApiError, get_common_headers
 
 
 class AuthRepositoryReq(BaseModel):
@@ -18,21 +18,20 @@ class AuthRepository:
 
     def auth(self, req_param: AuthRepositoryReq) -> AuthModel:
         """認証を実行し、アクセストークンを取得する"""
+        endpoint = f"{BASE_URL}/client_auth"
         payload = {
             "consumer_key": req_param.consumer_key,
             "consumer_secret": req_param.consumer_secret,
             "password": req_param.password,
             "username": req_param.username,
         }
-
         headers = get_common_headers()
-
-        response = requests.post(AUTH_ENDPOINT, json=payload, headers=headers)
+        response = requests.post(endpoint, json=payload, headers=headers)
         if response.status_code == 200:
             return AuthModel(**response.json())
         else:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=AUTH_ENDPOINT,
+                endpoint=endpoint,
             )

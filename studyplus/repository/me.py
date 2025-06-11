@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
 import requests
-from utils.http_utils import ME_ENDPOINT, ApiError, get_auth_headers
+from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class MeRepository:
@@ -12,8 +12,9 @@ class MeRepository:
 
     def get_me(self) -> Dict[str, Any]:
         """現在のユーザー情報を取得する"""
+        endpoint = f"{BASE_URL}/me"
         headers = get_auth_headers(self.access_token)
-        response = requests.get(ME_ENDPOINT, headers=headers)
+        response = requests.get(endpoint, headers=headers)
 
         if response.status_code == 200:
             return response.json()
@@ -21,5 +22,5 @@ class MeRepository:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=ME_ENDPOINT,
+                endpoint=endpoint,
             )

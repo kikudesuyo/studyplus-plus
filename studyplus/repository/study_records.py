@@ -5,7 +5,7 @@ from typing import Optional
 import requests
 from model.study_records_model import StudyRecordModel
 from pydantic import BaseModel, ConfigDict, Field
-from utils.http_utils import STUDY_RECORDS_ENDPOINT, get_auth_headers
+from utils.http_utils import BASE_URL, get_auth_headers
 
 
 class StudyRecordRepositoryReq(BaseModel):
@@ -76,10 +76,9 @@ class StudyRecordsRepository:
             runtimeType="default",
             study_source_type="studyplus",
         )
+        endpoint = f"{BASE_URL}/study_records"
 
-        response = requests.post(
-            STUDY_RECORDS_ENDPOINT, json=req.model_dump(), headers=self.headers
-        )
+        response = requests.post(endpoint, json=req.model_dump(), headers=self.headers)
         if response.status_code == 200:
             return StudyRecordModel(**response.json())
         else:

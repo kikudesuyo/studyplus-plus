@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 import requests
 from model.bookshelf_entries_model import BookshelfEntriesModel
 from pydantic import BaseModel, ConfigDict, Field
-from utils.http_utils import BOOKSHELF_ENTRIES_ENDPOINT, ApiError, get_auth_headers
+from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class BookshelfEntriesRepositoryReq(BaseModel):
@@ -32,7 +32,8 @@ class BookshelfEntriesRepository:
 
     def get_bookshelf_entries(self) -> BookshelfEntriesModel:
         """本棚エントリーを取得する"""
-        url = f"{BOOKSHELF_ENTRIES_ENDPOINT}?{urlencode(self.req.model_dump(by_alias=True))}"
+        endpoint = f"{BASE_URL}/bookshelf_entries"
+        url = f"{endpoint}?{urlencode(self.req.model_dump(by_alias=True))}"
 
         headers = get_auth_headers(self.access_token)
 
@@ -43,5 +44,5 @@ class BookshelfEntriesRepository:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=BOOKSHELF_ENTRIES_ENDPOINT,
+                endpoint=endpoint,
             )

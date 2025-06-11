@@ -1,10 +1,5 @@
 import requests
-from utils.http_utils import (
-    ApiError,
-    get_auth_headers,
-    like_endpoint,
-    withdraw_like_endpoint,
-)
+from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class TimelineEventsRepository:
@@ -13,22 +8,22 @@ class TimelineEventsRepository:
 
     def like(self, event_id: int) -> None:
         """イベントにいいねをする"""
-        url = like_endpoint(event_id)
-        response = requests.post(url, headers=self.headers)
+        endpoint = f"{BASE_URL}/timeline_events/{event_id}/like"
+        response = requests.post(endpoint, headers=self.headers)
         if response.status_code != 200:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=url,
+                endpoint=endpoint,
             )
 
     def withdraw_like(self, event_id: int) -> None:
         """イベントのいいねを取り消す"""
-        url = withdraw_like_endpoint(event_id)
-        response = requests.post(url, headers=self.headers)
+        endpoint = f"{BASE_URL}/timeline_events/{event_id}/withdraw_like"
+        response = requests.post(endpoint, headers=self.headers)
         if response.status_code != 200:
             raise ApiError(
                 status_code=response.status_code,
                 message=response.text,
-                endpoint=url,
+                endpoint=endpoint,
             )

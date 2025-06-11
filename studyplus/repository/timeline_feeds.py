@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 import requests
 from model.timeline_feeds_model import FolloweeModel
 from pydantic import BaseModel, Field
-from utils.http_utils import FOLLOWEE_ENDPOINT, ApiError, get_auth_headers
+from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class FolloweeRepositoryReq(BaseModel):
@@ -28,7 +28,9 @@ class TimelineFeedsRepository:
         次回のリクエストの `until` パラメータとして指定することで、続きの記録を取得できる。
         """
         req = FolloweeRepositoryReq(until=until)
-        url = f"{FOLLOWEE_ENDPOINT}?{urlencode(req.model_dump(by_alias=True))}"
+        endpoint = f"{BASE_URL}/timeline_feeds/followee"
+
+        url = f"{endpoint}?{urlencode(req.model_dump(by_alias=True))}"
         response = requests.get(url, headers=self.headers)
         if response.status_code == 200:
             return FolloweeModel(**response.json())
