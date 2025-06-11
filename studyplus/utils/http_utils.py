@@ -1,21 +1,6 @@
-from typing import Dict
+from typing import Any, Dict, Optional
 
 BASE_URL = "https://api.studyplus.jp/2"
-AUTH_ENDPOINT = f"{BASE_URL}/client_auth"
-ME_ENDPOINT = f"{BASE_URL}/me"
-BOOKSHELF_ENTRIES_ENDPOINT = f"{BASE_URL}/bookshelf_entries"
-
-
-FOLLOWEE_ENDPOINT = f"{BASE_URL}/timeline_feeds/followee"
-STUDY_RECORDS_ENDPOINT = f"{BASE_URL}/study_records"
-
-
-def like_endpoint(event_id):
-    return f"{BASE_URL}/timeline_events/{event_id}/likes/like"
-
-
-def unlike_endpoint(event_id):
-    return f"{BASE_URL}/timeline_events/{event_id}/likes/withdraw"
 
 
 def get_common_headers() -> Dict[str, str]:
@@ -49,8 +34,24 @@ def get_auth_headers(access_token: str) -> Dict[str, str]:
 class ApiError(Exception):
     """APIリクエストのエラーを表す例外クラス"""
 
-    def __init__(self, status_code: int, message: str, endpoint: str):
+    def __init__(
+        self,
+        status_code: int,
+        message: str,
+        endpoint: str,
+        query: Optional[Dict[str, Any]] = None,
+        body: Optional[Dict[str, Any]] = None,
+    ):
         self.status_code = status_code
         self.message = message
         self.endpoint = endpoint
-        super().__init__(f"API Error: {status_code} - {message} (endpoint: {endpoint})")
+        self.query = query
+        self.body = body
+
+    def __str__(self) -> str:
+        return (
+            f"API Error: {self.status_code} {self.message}\n"
+            f"Endpoint: {self.endpoint}\n"
+            f"Query: {self.query}\n"
+            f"Body: {self.body}"
+        )

@@ -1,13 +1,14 @@
 import uuid
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import requests
+from model.study_records_model import StudyRecordModel
 from pydantic import BaseModel, ConfigDict, Field
-from utils.http_utils import STUDY_RECORDS_ENDPOINT, get_auth_headers
+from utils.http_utils import BASE_URL, get_auth_headers
 
 
-class StudyRecordReq(BaseModel):
+class StudyRecordRepositoryReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
 
     material_code: str = Field(..., alias="material_code")
@@ -19,28 +20,7 @@ class StudyRecordReq(BaseModel):
     study_source_type: str = Field(..., alias="study_source_type")
 
 
-class StudyChallengePeriod(BaseModel):
-    start_date: Optional[str]
-    end_date: Optional[str]
-
-
-class StudyChallenge(BaseModel):
-    challenge_period: Optional[StudyChallengePeriod] = None
-    challenge_duration: Optional[int] = None
-    prev_duration: Optional[int] = None
-    duration: Optional[int] = None
-    prev_ratio: Optional[int] = None
-    ratio: Optional[int] = None
-
-
-class StudyRecordRes(BaseModel):
-    record_id: int
-    connection_result: Optional[Dict[str, Any]] = {}
-    status: Optional[str] = ""
-    study_challenge: Optional[StudyChallenge] = None
-
-
-class StudyRecordsHandler:
+class StudyRecordsRepository:
     def __init__(self, access_token: str):
         self.access_token = access_token
         self.headers = get_auth_headers(access_token)
@@ -67,7 +47,7 @@ class StudyRecordsHandler:
         comment: Optional[str] = None,
         post_token: Optional[str] = None,
         record_datetime: Optional[str] = None,
-    ) -> StudyRecordRes:
+    ) -> StudyRecordModel:
         """
         勉強記録を作成します。
 
@@ -87,7 +67,7 @@ class StudyRecordsHandler:
         if not record_datetime:
             record_datetime = self._get_current_datetime_iso()
 
-        req = StudyRecordReq(
+        req = StudyRecordRepositoryReq(
             material_code=material_code,
             duration=duration,
             post_token=post_token,
@@ -96,12 +76,11 @@ class StudyRecordsHandler:
             runtimeType="default",
             study_source_type="studyplus",
         )
+        endpoint = f"{BASE_URL}/study_records"
 
-        response = requests.post(
-            STUDY_RECORDS_ENDPOINT, json=req.model_dump(), headers=self.headers
-        )
+        response = requests.post(endpoint, json=req.model_dump(), headers=self.headers)
         if response.status_code == 200:
-            return StudyRecordRes(**response.json())
+            return StudyRecordModel(**response.json())
         else:
             raise Exception(
                 f"Failed to create study record: {response.status_code} - {response.text}"
