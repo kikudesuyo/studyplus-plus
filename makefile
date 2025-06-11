@@ -8,6 +8,8 @@ STUDYPLUS_ENV_FILE = studyplus-prod.yml
 # サービス定義
 STUDYPLUS_SERVICE = studyplus-api
 STUDYPLUS_IMAGE = $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT_ID)/$(REPO_NAME)/$(STUDYPLUS_SERVICE)
+STUDYPLUS_PLUS_SERVICE = studyplus-plus-db
+STUDYPLUS_PLUS_DB_IMAGE = $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT_ID)/$(REPO_NAME)/$(STUDYPLUS_PLUS_SERVICE)
 # MCP_SERVICE = mcp-server
 # MCP_IMAGE = $(GCP_REGION)-docker.pkg.dev/$(GCP_PROJECT_ID)/$(REPO_NAME)/$(MCP_SERVICE)
 
@@ -40,6 +42,33 @@ deploy-studyplus:
 		--env-vars-file=$(STUDYPLUS_ENV_FILE) \
 
 studyplus-all: push-studyplus deploy-studyplus
+
+# studyplus-plus-DB
+.PHONY: create-studyplus-plus-db-bucket push-studyplus-plus-db deploy-studyplus-plus-db
+
+BUCKET_NAME = studyplus-plus-db
+
+create-studyplus-plus-db-bucket:
+	gcloud storage buckets create "gs://${BUCKET_NAME}" --location=$(GCP_REGION)
+
+push-studyplus-plus-db:
+	docker build --platform linux/amd64 -f api/Dockerfile -t $(STUDYPLUS_PLUS_DB_IMAGE) .
+	docker push $(STUDYPLUS_PLUS_DB_IMAGE)
+
+deploy-studyplus-plus-db:
+	gcloud run deploy $(STUDYPLUS_PLUS_SERVICE) \
+		--image $(STUDYPLUS_PLUS_DB_IMAGE):latest \
+		--region $(GCP_REGION) \
+		--project $(GCP_PROJECT_ID) \
+		--allow-unauthenticated \
+
+
+
+
+
+
+
+
 
 # # MCPサーバー
 # .PHONY: push-mcp deploy-mcp
