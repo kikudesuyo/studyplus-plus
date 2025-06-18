@@ -2,7 +2,7 @@ import requests
 from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
-class TimelineEventsRepository:
+class TimelineEvents:
     def __init__(self, access_token):
         self.headers = get_auth_headers(access_token)
 

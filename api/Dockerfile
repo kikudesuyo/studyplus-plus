@@ -4,8 +4,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install  --no-cache-dir  -r requirements.txt
 
-COPY studyplus/ ./studyplus/
-WORKDIR /app/studyplus
+COPY api/ ./api/
+WORKDIR /app/api
 
 
 EXPOSE 8080

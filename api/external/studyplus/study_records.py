@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BASE_URL, get_auth_headers
 
 
-class StudyRecordRepositoryReq(BaseModel):
+class StudyRecordReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
 
     material_code: str = Field(..., alias="material_code")
@@ -20,7 +20,7 @@ class StudyRecordRepositoryReq(BaseModel):
     study_source_type: str = Field(..., alias="study_source_type")
 
 
-class StudyRecordsRepository:
+class StudyRecords:
     def __init__(self, access_token: str):
         self.access_token = access_token
         self.headers = get_auth_headers(access_token)
@@ -67,7 +67,7 @@ class StudyRecordsRepository:
         if not record_datetime:
             record_datetime = self._get_current_datetime_iso()
 
-        req = StudyRecordRepositoryReq(
+        req = StudyRecordReq(
             material_code=material_code,
             duration=duration,
             post_token=post_token,
