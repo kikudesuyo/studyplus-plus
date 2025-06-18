@@ -1,7 +1,26 @@
+from typing import Optional
+
 import requests
-from model.bookshelf_entries_model import BookshelfEntriesModel
 from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BASE_URL, ApiError, get_auth_headers
+
+
+class BookshelfEntriesMaterial(BaseModel):
+    material_code: str
+    user_category_id: Optional[int] = None
+    category_name: str
+    material_title: str
+    material_image_url: Optional[str] = None
+
+
+class BookshelfEntriesStatus(BaseModel):
+    open: Optional[list[BookshelfEntriesMaterial]] = None
+    in_progress: Optional[list[BookshelfEntriesMaterial]] = None
+    closed: Optional[list[BookshelfEntriesMaterial]] = None
+
+
+class BookshelfEntriesRes(BaseModel):
+    bookshelf_entries: BookshelfEntriesStatus
 
 
 class BookshelfEntriesReq(BaseModel):
@@ -29,14 +48,14 @@ class BookshelfEntries:
             include_drill=True,
         )
 
-    def get_bookshelf_entries(self) -> BookshelfEntriesModel:
+    def get_bookshelf_entries(self) -> BookshelfEntriesRes:
         """本棚エントリーを取得する"""
         endpoint = f"{BASE_URL}/bookshelf_entries"
         param = self.req.model_dump(by_alias=True)
 
         response = requests.get(endpoint, headers=self.headers, params=param)
         if response.status_code == 200:
-            return BookshelfEntriesModel(**response.json())
+            return BookshelfEntriesRes(**response.json())
         else:
             raise ApiError(
                 status_code=response.status_code,

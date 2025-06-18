@@ -16,7 +16,7 @@ class AuthHandlerReq(BaseModel):
     )
 
 
-def get_auth(credentials: AuthHandlerReq) -> AuthModel:
+def handle_get_auth(credentials: AuthHandlerReq) -> AuthModel:
     """
     ユーザー認証を行い、アクセストークンを取得します。
 

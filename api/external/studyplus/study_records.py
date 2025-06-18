@@ -1,11 +1,31 @@
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import requests
-from model.study_records_model import StudyRecordModel
 from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BASE_URL, get_auth_headers
+
+
+class StudyChallengePeriod(BaseModel):
+    start_date: Optional[str]
+    end_date: Optional[str]
+
+
+class StudyChallenge(BaseModel):
+    challenge_period: Optional[StudyChallengePeriod] = None
+    challenge_duration: Optional[int] = None
+    prev_duration: Optional[int] = None
+    duration: Optional[int] = None
+    prev_ratio: Optional[int] = None
+    ratio: Optional[int] = None
+
+
+class StudyRecordRes(BaseModel):
+    record_id: int
+    connection_result: Optional[Dict[str, Any]] = {}
+    status: Optional[str] = ""
+    study_challenge: Optional[StudyChallenge] = None
 
 
 class StudyRecordReq(BaseModel):
@@ -47,7 +67,7 @@ class StudyRecords:
         comment: Optional[str] = None,
         post_token: Optional[str] = None,
         record_datetime: Optional[str] = None,
-    ) -> StudyRecordModel:
+    ) -> StudyRecordRes:
         """
         勉強記録を作成します。
 
@@ -80,7 +100,7 @@ class StudyRecords:
 
         response = requests.post(endpoint, json=req.model_dump(), headers=self.headers)
         if response.status_code == 200:
-            return StudyRecordModel(**response.json())
+            return StudyRecordRes(**response.json())
         else:
             raise Exception(
                 f"Failed to create study record: {response.status_code} - {response.text}"
