@@ -2,7 +2,7 @@ services:
   studyplus-api:
     build:
       context: .
-      dockerfile: studyplus/Dockerfile
+      dockerfile: api/Dockerfile
     env_file:
       - .env
     ports:

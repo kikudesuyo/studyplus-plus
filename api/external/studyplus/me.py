@@ -4,7 +4,7 @@ import requests
 from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
-class MeRepository:
+class Me:
     """ユーザー情報を取得するハンドラークラス"""
 
     def __init__(self, access_token: str):

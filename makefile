@@ -32,7 +32,7 @@ setup-gcp:
 .PHONY: push-studyplus deploy-studyplus
 
 push-studyplus:
-	docker build --platform linux/amd64 -f studyplus/Dockerfile -t $(STUDYPLUS_IMAGE) .
+	docker build --platform linux/amd64 -f api/Dockerfile -t $(STUDYPLUS_IMAGE) .
 	docker push $(STUDYPLUS_IMAGE)
 
 deploy-studyplus:

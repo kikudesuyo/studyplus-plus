@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from model.auth_model import AuthModel
 from pydantic import BaseModel, EmailStr, Field
-from repository.auth import AuthRepository, AuthRepositoryReq
+from service.auth import auth
 from utils.env_utils import get_required_env_var
 
 
@@ -31,13 +31,9 @@ def get_auth(credentials: AuthHandlerReq) -> AuthModel:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server configuration error: Missing API credentials.",
         )
-
-    payload = AuthRepositoryReq(
+    return auth(
         consumer_key=consumer_key,
         consumer_secret=consumer_secret,
-        password=credentials.password,
-        username=credentials.email,
+        email=credentials.email,
+        pasword=credentials.password,
     )
-
-    auth_repo = AuthRepository()
-    return auth_repo.auth(payload)

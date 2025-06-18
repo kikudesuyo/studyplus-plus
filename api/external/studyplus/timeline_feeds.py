@@ -4,11 +4,11 @@ from pydantic import BaseModel, Field
 from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
-class FolloweeRepositoryReq(BaseModel):
+class FolloweeReq(BaseModel):
     until: str = Field(..., alias="until")
 
 
-class TimelineFeedsRepository:
+class TimelineFeeds:
     """フォロー中のユーザーの学習記録を取得するハンドラークラス"""
 
     def __init__(self, access_token: str):
@@ -25,7 +25,7 @@ class TimelineFeedsRepository:
         より過去の記録を取得したい場合は、前回のレスポンスに含まれる `next` の値を、
         次回のリクエストの `until` パラメータとして指定することで、続きの記録を取得できる。
         """
-        req = FolloweeRepositoryReq(until=until)
+        req = FolloweeReq(until=until)
 
         endpoint = f"{BASE_URL}/timeline_feeds/followee"
         params = req.model_dump(by_alias=True)

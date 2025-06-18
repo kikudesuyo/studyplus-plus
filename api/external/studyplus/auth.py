@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BASE_URL, ApiError, get_common_headers
 
 
-class AuthRepositoryReq(BaseModel):
+class AuthReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
 
     consumer_key: str = Field(..., alias="consumer_key")
@@ -13,13 +13,13 @@ class AuthRepositoryReq(BaseModel):
     username: str = Field(..., alias="username")
 
 
-class AuthRepository:
+class Auth:
     """認証を処理するハンドラークラス"""
 
     def __init__(self):
         self.headers = get_common_headers()
 
-    def auth(self, req_param: AuthRepositoryReq) -> AuthModel:
+    def auth(self, req_param: AuthReq) -> AuthModel:
         """認証を実行し、アクセストークンを取得する"""
         endpoint = f"{BASE_URL}/client_auth"
         payload = {

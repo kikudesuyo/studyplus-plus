@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
-class BookshelfEntriesRepositoryReq(BaseModel):
+class BookshelfEntriesReq(BaseModel):
     model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
 
     username: str = Field(..., alias="username")
@@ -12,7 +12,7 @@ class BookshelfEntriesRepositoryReq(BaseModel):
     include_drill: bool = Field(..., alias="include_drill")
 
 
-class BookshelfEntriesRepository:
+class BookshelfEntries:
     """本棚エントリーを取得するハンドラークラス"""
 
     def __init__(self, access_token: str, username: str):
@@ -21,9 +21,9 @@ class BookshelfEntriesRepository:
         self.req = self.__new_req()
         self.headers = get_auth_headers(access_token)
 
-    def __new_req(self) -> BookshelfEntriesRepositoryReq:
+    def __new_req(self) -> BookshelfEntriesReq:
         """リクエストオブジェクトを作成する"""
-        return BookshelfEntriesRepositoryReq(
+        return BookshelfEntriesReq(
             username=self.username,
             include_categories=True,
             include_drill=True,
