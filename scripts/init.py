@@ -1,7 +1,10 @@
 import sqlite3
 
-dbname = "studyplus-plus.db"
-conn = sqlite3.connect(dbname)
+DB_NAME = "studyplus-plus.db"
+
+uri = f"file:{DB_NAME}?mode=wo"
+
+conn = sqlite3.connect(uri, uri=True)
 
 
 cur = conn.cursor()
@@ -25,19 +28,6 @@ cur.execute(
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """
-)
-
-cur.executemany(
-    """
-    INSERT INTO user (studyplus_user_id, name) VALUES (?, ?)
-    """,
-    [(1, "naoki"), (2, "雅"), (3, "vin")],
-)
-cur.executemany(
-    """
-    INSERT INTO winner (user_id) VALUES (?)
-    """,
-    [(1,), (2,), (3,)],
 )
 
 

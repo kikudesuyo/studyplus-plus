@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -17,10 +18,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+DB_NAME = "studyplus-plus.db"
+DB_URI = f"file:{DB_NAME}?mode=ro"
+
 
 def create_db():
-    dbname = "studyplus-plus.db"
-    conn = sqlite3.connect(dbname)
+    conn = sqlite3.connect(DB_URI, uri=True)
     cur = conn.cursor()
     cur.execute(
         """
@@ -59,8 +62,7 @@ def create_db():
 
 
 def add_user():
-    dbname = "studyplus-plus.db"
-    conn = sqlite3.connect(dbname)
+    conn = sqlite3.connect(DB_URI, uri=True)
     cur = conn.cursor()
     cur.execute(
         """
@@ -80,8 +82,7 @@ def read_db():
     print(f"Current directory: {os.getcwd()}")
     print(f"Directory contents: {os.listdir(os.getcwd())}")
 
-    dbname = "studyplus-plus.db"
-    conn = sqlite3.connect(dbname)
+    conn = sqlite3.connect(DB_URI, uri=True)
     cur = conn.cursor()
     data = cur.execute("SELECT * FROM user").fetchall()
     logging.info(f"Fetched data: {data}")
