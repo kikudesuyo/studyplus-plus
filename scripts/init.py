@@ -13,7 +13,7 @@ cur.execute(
     """
     CREATE TABLE IF NOT EXISTS user (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        studyplus_user_id INTEGER NOT NULL UNIQUE,
+        studyplus_user_id TEXT NOT NULL UNIQUE,
         name TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -24,7 +24,7 @@ cur.execute(
     """
     CREATE TABLE IF NOT EXISTS battle (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name INTEGER NOT NULL,
+        name TEXT NOT NULL,
         start_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         end_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

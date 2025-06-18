@@ -3,6 +3,7 @@ from typing import List
 
 from external.studyplus.timeline_feeds import BodyStudyRecord, TimelineFeeds
 from pydantic import BaseModel
+from repository.study_weekly_battle import get_user_studyplus_ids, register_winner
 
 
 class UserStudyRecord(BaseModel):
@@ -11,13 +12,6 @@ class UserStudyRecord(BaseModel):
     user_image_url: str
     duration: int
     record_datetime: str
-
-
-def get_study_records(user_id: str, until: str):
-    """ユーザーの学習記録を取得する"""
-    access_token_from_repo = "a5317c96-c5bd-4366-843f-a2068112ad95"
-    timeline_feeds = TimelineFeeds(access_token_from_repo)
-    return timeline_feeds.get_user_study_feeds(user_id, until)
 
 
 def get_weekly_study_records(user_id: str, end: datetime):
@@ -68,3 +62,26 @@ def get_weekly_total_duration(user_id: str, end: datetime) -> int:
     weekly_study_records = get_weekly_study_records(user_id, end)
     total_duration = sum(record.duration for record in weekly_study_records)
     return total_duration
+
+
+def register_weekly_study_battle(end: datetime):
+    """週間学習バトルを登録する"""
+    user_ids = get_user_studyplus_ids()
+    user_total_study_duration = {}  # key: user_id, value: total_duration
+    for user_id in user_ids:
+        weekly_study_record = get_weekly_study_records(user_id, end)
+        total_duration = sum(record.duration for record in weekly_study_record)
+        user_total_study_duration[user_id] = total_duration
+    sorted_user_durations = sorted(
+        user_total_study_duration.items(), key=lambda x: x[1], reverse=True
+    )
+
+    user_place = {}
+    for place, (user_id, total_duration) in enumerate(sorted_user_durations, start=1):
+        user_place[user_id] = place
+    register_winner(
+        battel_name=f"週間学習バトル {end.strftime('%Y-%m-%d')}",
+        start=end - timedelta(days=6, hours=23, minutes=59, seconds=59),
+        end=end,
+        user_place=user_place,
+    )

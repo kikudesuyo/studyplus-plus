@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta
 
 import pytz
-from service.study_weekly_battle import get_weekly_study_records
+from service.study_weekly_battle import (
+    get_weekly_study_records,
+    register_weekly_study_battle,
+)
 
 
 def handle_get_weekly_study_records(user_id: str):
@@ -14,3 +17,19 @@ def handle_get_weekly_study_records(user_id: str):
     last_sunday_jst = now.replace(hour=23, minute=59, second=59) - timedelta(days=1)
     last_sunday_utc = last_sunday_jst.astimezone(pytz.utc)
     return get_weekly_study_records(user_id, last_sunday_utc)
+
+
+def handle_register_weekly_study_battle():
+    """週間学習バトルを登録する"""
+    jst = pytz.timezone("Asia/Tokyo")
+    now = datetime.now(jst)
+    # is_monday = now.weekday() == 0  # 月曜日: 0, 火曜日: 1, ..., 日曜日: 6
+    # if not is_monday:
+    #     raise ValueError("This endpoint can only be called on Mondays.")
+    last_sunday_jst = now.replace(hour=23, minute=59, second=59) - timedelta(days=1)
+    last_sunday_utc = last_sunday_jst.astimezone(pytz.utc)
+    register_weekly_study_battle(last_sunday_utc)
+    return {
+        "message": "Weekly study battle registered successfully",
+        "end_date": last_sunday_jst.strftime("%Y-%m-%d %H:%M:%S"),
+    }
