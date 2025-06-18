@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import List
 
-import pytz
 from external.studyplus.timeline_feeds import BodyStudyRecord, TimelineFeeds
 from pydantic import BaseModel
 
@@ -48,7 +47,6 @@ def get_weekly_study_records(user_id: str, end: datetime):
             record_datetime = datetime.strptime(
                 record.record_datetime, "%Y-%m-%dT%H:%M:%SZ"
             ).replace(tzinfo=timezone.utc)
-            print(f"record_datetime: {record_datetime}, start: {start}, end: {end}")
             if record_datetime > end:
                 continue
             if record_datetime < start:

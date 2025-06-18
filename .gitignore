@@ -1,6 +1,7 @@
 .env
 .venv
 **.pyc
+*.db
 
 
 studyplus-prod.yml

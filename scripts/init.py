@@ -2,7 +2,7 @@ import sqlite3
 
 DB_NAME = "studyplus-plus.db"
 
-uri = f"file:{DB_NAME}?mode=wo"
+uri = f"file:{DB_NAME}?mode=rwc"
 
 conn = sqlite3.connect(uri, uri=True)
 
@@ -19,12 +19,26 @@ cur.execute(
     );
     """
 )
+
+cur.execute(
+    """
+    CREATE TABLE IF NOT EXISTS battle (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name INTEGER NOT NULL,
+        start_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        end_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """
+)
+
 cur.execute(
     """    
-    CREATE TABLE IF NOT EXISTS winner  (
+    CREATE TABLE IF NOT EXISTS result   (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL REFERENCES user(id),
-        win_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        battle_id INTEGER NOT NULL REFERENCES battle(id),
+        place INTEGER NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """

@@ -1,9 +1,15 @@
 from fastapi import APIRouter
 from handler.auth_handler import handle_get_auth
+from handler.register_user_handler import handle_register_user
 from handler.study_weekly_battle_handler import handle_get_weekly_study_records
 
 r = APIRouter()
 r.add_api_route("/auth", handle_get_auth, methods=["POST"])
+r.add_api_route(
+    "/register-user",
+    handle_register_user,
+    methods=["POST"],
+)
 r.add_api_route(
     "/study-weekly-battle",
     handle_get_weekly_study_records,
