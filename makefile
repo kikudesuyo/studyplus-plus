@@ -42,6 +42,10 @@ deploy-studyplus:
 		--project $(GCP_PROJECT_ID) \
 		--allow-unauthenticated \
 		--env-vars-file=$(STUDYPLUS_ENV_FILE) \
+		--max-instances=1 \
+		--min-instances=0 \
+		--memory=256Mi \
+		--timeout=30s \
 
 studyplus-all: push-studyplus deploy-studyplus
 
