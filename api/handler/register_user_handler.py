@@ -1,4 +1,4 @@
-from service.register_user import register_user
+from api.service.register_user import register_user
 
 
 def handle_register_user(user_id: str, username: str):

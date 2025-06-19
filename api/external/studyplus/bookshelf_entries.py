@@ -2,7 +2,8 @@ from typing import Optional
 
 import requests
 from pydantic import BaseModel, ConfigDict, Field
-from utils.http_utils import BASE_URL, ApiError, get_auth_headers
+
+from api.utils.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class BookshelfEntriesMaterial(BaseModel):

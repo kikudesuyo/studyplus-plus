@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 
 import pytz
-from service.study_weekly_battle import (
+
+from api.service.study_weekly_battle import (
     get_weekly_study_records,
     register_weekly_study_battle,
 )

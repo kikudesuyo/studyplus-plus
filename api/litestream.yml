@@ -2,7 +2,7 @@ dbs:
   - path: /app/studyplus-plus.db # データベースファイルのローカルパス
     # レプリケート先
     replicas:
-      # この設定により gs://litetodo-db/todo.db にデータベースファイルがレプリケートされる
+      # この設定により gs://studyplus-plus-db/studyplus-plus.db にデータベースファイルがレプリケートされる
       - type: gcs # レプリケート先のタイプ
         bucket: studyplus-plus-db # バケット名
         path: studyplus-plus.db # レプリケート先のパス
