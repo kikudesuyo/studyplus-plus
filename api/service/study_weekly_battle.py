@@ -19,11 +19,10 @@ class UserStudyRecord(BaseModel):
     record_datetime: str
 
 
-def get_weekly_study_records(user_id: str, end: datetime):
+def get_user_weekly_study_records(user_id: str, start: datetime, end: datetime):
     """ユーザーの週間学習記録を取得する"""
     timeline_feeds = TimelineFeeds(access_token_from_repo)
 
-    start = end - timedelta(days=6, hours=23, minutes=59, seconds=59)
     weekly_study_records: List[UserStudyRecord] = []
     next_until = ""
     while True:
@@ -61,11 +60,52 @@ def get_weekly_study_records(user_id: str, end: datetime):
         next_until = feeds_res.next
 
 
-def get_user_study_duration(user_id: str, end: datetime) -> int:
+def get_weekly_study_records(start_utc: datetime, end_utc: datetime):
     """ユーザーの週間学習時間を取得する"""
-    weekly_study_records = get_weekly_study_records(user_id, end)
-    total_duration = sum(record.duration for record in weekly_study_records)
-    return total_duration
+    users = get_users()
+    user_total_study_duration: List[UserTotalStudyDuration] = []
+    for user in users:
+        weekly_study_record = get_user_weekly_study_records(
+            user.studyplus_id, start_utc, end_utc
+        )
+        total_duration = sum(record.duration for record in weekly_study_record)
+        user_total_study_duration.append(
+            UserTotalStudyDuration(
+                user=user,
+                total_duration=total_duration,
+            )
+        )
+
+    sorted_user_durations = sorted(
+        [
+            UserTotalStudyDuration(
+                user=duration.user,
+                total_duration=duration.total_duration,
+            )
+            for duration in user_total_study_duration
+        ],
+        key=lambda x: x.total_duration,
+        reverse=True,
+    )
+
+    user_places: List[UserPlaceModel] = []
+    for place, duration in enumerate(sorted_user_durations, start=1):
+        user_places.append(
+            UserPlaceModel(
+                user=duration.user,
+                place=place,
+                total_duration=duration.total_duration,
+            )
+        )
+
+    start_jst = start_utc.astimezone(timezone(timedelta(hours=9)))
+    end_jst = end_utc.astimezone(timezone(timedelta(hours=9)))
+    comment = generate_weekly_battle_comment(
+        start=start_jst,
+        end=end_jst,
+        user_places=user_places,
+    )
+    return comment
 
 
 class UserTotalStudyDuration(BaseModel):
@@ -73,12 +113,15 @@ class UserTotalStudyDuration(BaseModel):
     total_duration: int
 
 
-def register_weekly_study_battle(end: datetime):
+def register_weekly_study_battle(start: datetime, end: datetime):
     """週間学習バトルを登録する"""
     users = get_users()
     user_total_study_duration: List[UserTotalStudyDuration] = []
+
     for user in users:
-        weekly_study_record = get_weekly_study_records(user.studyplus_id, end)
+        weekly_study_record = get_user_weekly_study_records(
+            user.studyplus_id, start, end
+        )
         total_duration = sum(record.duration for record in weekly_study_record)
         user_total_study_duration.append(
             UserTotalStudyDuration(
