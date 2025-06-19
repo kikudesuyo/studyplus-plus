@@ -14,4 +14,4 @@ litestream restore -if-replica-exists -config /etc/litestream.yml /app/studyplus
 # Google Cloud Storage にデータベースファイルをレプリケートしてアプリケーションを起動する
 # `-exec` フラグにアプリケーションの起動コマンドを指定する (今回はアプリケーションのバイナリのパスを指定している)
 # `-config` フラグに設定ファイルのパスを指定する
-litestream replicate -exec "uvicorn main:app --host 0.0.0.0 --port 8080" -config /etc/litestream.yml
+litestream replicate -exec "uvicorn api.main:app --host 0.0.0.0 --port 8080" -config /etc/litestream.yml

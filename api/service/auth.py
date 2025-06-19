@@ -1,5 +1,5 @@
-from external.studyplus.auth import Auth, AuthReq
-from model.auth_model import AuthModel
+from api.external.studyplus.auth import Auth, AuthReq
+from api.model.auth_model import AuthModel
 
 
 def auth(consumer_key, consumer_secret, email, pasword) -> AuthModel:
