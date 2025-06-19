@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta, timezone
 from typing import List
 
-from external.studyplus.study_records import StudyRecord
-from external.studyplus.timeline_feeds import BodyStudyRecord, TimelineFeeds
-from model.user_model import UserModel, UserPlaceModel
 from pydantic import BaseModel
-from repository.study_weekly_battle import get_users, register_result
+
+from api.external.studyplus.study_records import StudyRecord
+from api.external.studyplus.timeline_feeds import BodyStudyRecord, TimelineFeeds
+from api.model.user_model import UserModel, UserPlaceModel
+from api.repository.study_weekly_battle import get_users, register_result
 
 access_token_from_repo = "a5317c96-c5bd-4366-843f-a2068112ad95"
 battle_material_code = "2a66f47e-3ef0-47f7-a893-b31174a392a7"
@@ -122,7 +123,7 @@ def register_weekly_study_battle(end: datetime):
         end=end,
         user_places=user_places,
     )
-    study_record.post(battle_material_code, 0, comment=comment)
+    # study_record.post(battle_material_code, 0, comment=comment)
 
 
 def generate_weekly_battle_comment(

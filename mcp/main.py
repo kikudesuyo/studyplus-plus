@@ -3,7 +3,8 @@ import asyncio
 from fastmcp import Client
 from google import genai
 from google.genai import types
-from utils.env_utils import get_required_env_var
+
+from api.utils.env_utils import get_required_env_var
 
 GEMINI_API_KEY = get_required_env_var("GEMINI_API_KEY")
 

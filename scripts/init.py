@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_NAME = "studyplus-plus.db"
+DB_NAME = "api/studyplus-plus.db"
 
 uri = f"file:{DB_NAME}?mode=rwc"
 

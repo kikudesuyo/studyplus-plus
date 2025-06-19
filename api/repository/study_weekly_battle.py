@@ -1,7 +1,7 @@
 from typing import List
 
-from model.user_model import UserModel, UserPlaceModel
-from repository.init_db import get_db_connection
+from api.model.user_model import UserModel, UserPlaceModel
+from api.repository.init_db import get_db_connection
 
 
 def register_weekly_study_battle(user_id: str, username: str):
