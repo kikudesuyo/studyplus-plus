@@ -20,7 +20,7 @@ class BodyStudyRecord(BaseModel):
     material_type: str
     material_code: str
     material_title: str
-    material_image_url: str
+    material_image_url: Optional[str] = None
     material_image_preset_name: Optional[str] = None
     record_id: int
     record_comment: str
