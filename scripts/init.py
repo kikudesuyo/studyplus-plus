@@ -44,6 +44,16 @@ cur.execute(
     """
 )
 
+cur.execute(
+    "INSERT OR IGNORE INTO user (studyplus_user_id, name) VALUES ('1262ce7472e611e8a7090a4fa595880a', 'いく');"
+)
+cur.execute(
+    "INSERT OR IGNORE INTO user (studyplus_user_id, name) VALUES ('af7f95ae365641f8a2be64b841f2978a', 'もち');"
+)
+cur.execute(
+    "INSERT OR IGNORE INTO user (studyplus_user_id, name) VALUES ('914a9b5c61e34c2fbc05315f56a768c4', 'きく');"
+)
+
 
 conn.commit()
 conn.close()

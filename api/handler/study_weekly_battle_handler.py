@@ -20,7 +20,7 @@ def handle_get_weekly_study_records(user_id: str):
 
 
 def handle_register_weekly_study_battle():
-    """週間学習バトルを登録する"""
+    """週間学習バトルを終了させる"""
     jst = pytz.timezone("Asia/Tokyo")
     now = datetime.now(jst)
     # is_monday = now.weekday() == 0  # 月曜日: 0, 火曜日: 1, ..., 日曜日: 6

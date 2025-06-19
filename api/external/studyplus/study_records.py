@@ -40,7 +40,7 @@ class StudyRecordReq(BaseModel):
     study_source_type: str = Field(..., alias="study_source_type")
 
 
-class StudyRecords:
+class StudyRecord:
     def __init__(self, access_token: str):
         self.access_token = access_token
         self.headers = get_auth_headers(access_token)
@@ -60,7 +60,7 @@ class StudyRecords:
         now = datetime.now().astimezone()
         return now.isoformat()
 
-    def create_study_record(
+    def post(
         self,
         material_code: str,
         duration: int,
@@ -69,10 +69,10 @@ class StudyRecords:
         record_datetime: Optional[str] = None,
     ) -> StudyRecordRes:
         """
-        勉強記録を作成します。
+        勉強記録を登録します。
 
         Args:
-            material_code: 教材ID
+            material_code: 教材ID (教材なしの場合は""を指定)
             duration: 勉強時間（秒）
             comment: コメント（オプション）
             post_token: ポストトークン（UUIDで生成）
