@@ -1,8 +1,9 @@
 from fastapi import HTTPException, status
-from model.auth_model import AuthModel
 from pydantic import BaseModel, EmailStr, Field
-from service.auth import auth
-from utils.env_utils import get_required_env_var
+
+from api.model.auth_model import AuthModel
+from api.service.auth import auth
+from api.utils.env_utils import get_required_env_var
 
 
 class AuthHandlerReq(BaseModel):

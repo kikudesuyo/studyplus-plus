@@ -31,6 +31,14 @@ setup-gcp:
 # Studyplus-apiサーバー
 .PHONY: push-studyplus deploy-studyplus
 
+WEEKLY_BATTLE_JOB_ENDPOINT = "https://studyplus-api-445395497817.asia-northeast1.run.app/weekly-study-battle"
+
+DEV_DB_PATH = api/studyplus-plus.db
+
+dev:
+	DB_PATH=$(DEV_DB_PATH) uvicorn api.main:app --reload 
+
+
 push-studyplus:
 	docker build --platform linux/amd64 -f api/Dockerfile -t $(STUDYPLUS_IMAGE) .
 	docker push $(STUDYPLUS_IMAGE)
@@ -49,6 +57,21 @@ deploy-studyplus:
 
 studyplus-all: push-studyplus deploy-studyplus
 
+
+cron-weekly-study-battle:
+	gcloud scheduler jobs create http register-weekly-battle-job \
+		--location=$(GCP_REGION) \
+		--description="1週間の勉強結果をStudyplusにPOSTする" \
+		--schedule="0 19 * * 0" \
+		--uri ${WEEKLY_BATTLE_JOB_ENDPOINT} \
+		--http-method=POST \
+		--time-zone="UTC" \
+		--project=$(GCP_PROJECT_ID) \
+
+
+
+
+
 # studyplus-plus-DB
 .PHONY: create-studyplus-plus-db-bucket push-studyplus-plus-db deploy-studyplus-plus-db
 
@@ -57,20 +80,22 @@ BUCKET_NAME = studyplus-plus-db
 create-studyplus-plus-db-bucket:
 	gcloud storage buckets create "gs://${BUCKET_NAME}" --location=$(GCP_REGION)
 
-push-studyplus-plus-db:
-	docker build --platform linux/amd64 -f api/Dockerfile -t $(STUDYPLUS_PLUS_DB_IMAGE) .
-	docker push $(STUDYPLUS_PLUS_DB_IMAGE)
-
-deploy-studyplus-plus-db:
-	gcloud run deploy $(STUDYPLUS_PLUS_SERVICE) \
-		--image $(STUDYPLUS_PLUS_DB_IMAGE) \
-		--region $(GCP_REGION) \
-		--project $(GCP_PROJECT_ID) \
-		--allow-unauthenticated \
 
 
+# push-studyplus-plus-db:
+# 	docker build --platform linux/amd64 -f api/Dockerfile -t $(STUDYPLUS_PLUS_DB_IMAGE) .
+# 	docker push $(STUDYPLUS_PLUS_DB_IMAGE)
 
-
+# deploy-studyplus-plus-db:
+# 	gcloud run deploy $(STUDYPLUS_PLUS_SERVICE) \
+# 		--image $(STUDYPLUS_PLUS_DB_IMAGE) \
+# 		--region $(GCP_REGION) \
+# 		--project $(GCP_PROJECT_ID) \
+# 		--allow-unauthenticated \
+# 		--max-instances=1 \
+# 		--min-instances=0 \
+# 		--memory=256Mi \
+# 		--timeout=30s \
 
 
 
