@@ -6,3 +6,4 @@ dbs:
       - type: gcs # レプリケート先のタイプ
         bucket: studyplus-plus-db # バケット名
         path: studyplus-plus.db # レプリケート先のパス
+        
