@@ -170,7 +170,7 @@ def register_weekly_study_battle(start: datetime, end: datetime):
     study_record.post(battle_material_code, 0, comment=comment)
 
 
-def generate_study_battle_sammary_by_gemini(user_places: List[UserPlaceModel]) -> str:
+def generate_study_battle_summary_by_gemini(user_places: List[UserPlaceModel]) -> str:
     prompt = f"""
     あなたは勉強時間バトルの結果を要約し、感情的でポジティブなトーンでコメントを生成してください。
     出力は「はい、わかりました」や「以下が結果です」などの前置きや説明を一切含めず、直接コメント本文のみを出力してください。
@@ -222,7 +222,7 @@ def generate_weekly_battle_comment(
         + f"{place_comment}\n\n"
         + f"勝者は {sorted_user_places[0].user.name} さんです！おめでとうございます🎉\n"
         + f"miyavinからのコメントです:\n"
-        + generate_study_battle_sammary_by_gemini(sorted_user_places)
+        + generate_study_battle_summary_by_gemini(sorted_user_places)
         + f"次回も頑張りましょう！🔥\n"
         + f"See you next week ;D"
     )
