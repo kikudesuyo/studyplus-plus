@@ -25,7 +25,7 @@ pip install -r requirements.txt
 #(任意)環境変数の登録(main.py以外でもファイル実行を可能にさせる)
 .venv/bin/activateにて`YOUR_PATH`を指定して下記を記述してください
 #環境変数を追加
-export PYTHONPATH="YOUR_PATH/studyplus-plus/src:$PYTHONPATH"
+export PYTHONPATH="YOUR_PATH/studyplus-plus/api:$PYTHONPATH"
 ```
 
 #### .env ファイル作成
