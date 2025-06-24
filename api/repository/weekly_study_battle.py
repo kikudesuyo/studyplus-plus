@@ -1,0 +1,35 @@
+from typing import List
+
+from api.repository.init_db import get_db_connection
+from api.service.weekly_study_battle.model import PlaceModel
+
+
+def register_result(battel_name, start, end, user_places: List[PlaceModel]):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO battle (name, start_at, end_at) VALUES (?, ?, ?)
+        """,
+        [battel_name, start, end],
+    )
+    battle_id = cur.lastrowid
+    for user_place in user_places:
+        cur.execute(
+            """
+            SELECT id FROM user WHERE studyplus_user_id = ?
+            """,
+            [user_place.user.studyplus_id],
+        )
+        user_record = cur.fetchone()
+        if not user_record:
+            raise Exception("ユーザーが登録されていません")
+        user_id = user_record[0]
+        cur.execute(
+            """
+            INSERT INTO result (user_id, battle_id, place) VALUES (?,  ?, ?)
+            """,
+            [user_id, battle_id, user_place.place],
+        )
+    conn.commit()
+    cur.close()
