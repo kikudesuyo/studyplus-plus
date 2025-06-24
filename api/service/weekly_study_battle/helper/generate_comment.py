@@ -25,13 +25,13 @@ def generate_comment(
         f"📣勉強時間バトル {start.strftime('%Y-%m-%d')} ~ {end.strftime('%Y-%m-%d')} の結果です📣\n\n"
         + f"{place_comment}\n\n"
         + f"勝者は {sorted_user_places[0].user.name} さんです！おめでとうございます🎉\n"
-        + __generate_result_summary(sorted_user_places)
+        + _generate_result_summary(sorted_user_places)
         + f"次回も頑張りましょう！🔥\n"
         + f"See you next week ;D"
     )
 
 
-def __generate_result_summary(user_places: List[PlaceModel]) -> str:
+def _generate_result_summary(user_places: List[PlaceModel]) -> str:
     prompt = f"""
     あなたは勉強時間バトルの結果を要約し、感情的でポジティブなトーンでコメントを生成してください。
     出力は「はい、わかりました」や「以下が結果です」などの前置きや説明を一切含めず、直接コメント本文のみを出力してください。
