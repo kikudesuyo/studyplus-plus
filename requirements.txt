@@ -22,6 +22,7 @@ httptools==0.6.4
 httpx==0.28.1
 httpx-sse==0.4.0
 idna==3.10
+iniconfig==2.1.0
 itsdangerous==2.2.0
 Jinja2==3.1.6
 markdown-it-py==3.0.0
@@ -30,6 +31,8 @@ mcp==1.9.3
 mdurl==0.1.2
 openapi-pydantic==0.5.1
 orjson==3.10.18
+packaging==25.0
+pluggy==1.6.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.22
@@ -38,6 +41,7 @@ pydantic-extra-types==2.10.5
 pydantic-settings==2.9.1
 pydantic_core==2.33.1
 Pygments==2.19.1
+pytest==8.4.1
 python-dotenv==1.1.0
 python-multipart==0.0.20
 pytz==2025.2
