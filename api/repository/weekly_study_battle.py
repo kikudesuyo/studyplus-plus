@@ -23,3 +23,4 @@ def insert_result(battle_name, start, end, user_places: List[PlaceModel]):
         )
     conn.commit()
     cur.close()
+    conn.close()
