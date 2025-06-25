@@ -4,7 +4,7 @@ from api.repository.init_db import get_db_connection
 from api.service.weekly_study_battle.model import PlaceModel
 
 
-def register_result(battle_name, start, end, user_places: List[PlaceModel]):
+def insert_result(battle_name, start, end, user_places: List[PlaceModel]):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(

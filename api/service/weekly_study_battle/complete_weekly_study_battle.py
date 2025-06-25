@@ -3,7 +3,7 @@ from typing import List
 
 from api.external.studyplus.study_records import StudyRecord
 from api.repository.user import get_users
-from api.repository.weekly_study_battle import register_result
+from api.repository.weekly_study_battle import insert_result
 from api.service.weekly_study_battle.helper.calculate_user_places import (
     calculate_user_places,
 )
@@ -34,7 +34,7 @@ def complete_weekly_study_battle(start: datetime, end: datetime, access_token: s
 
     user_places: List[PlaceModel] = calculate_user_places(user_total_study_durations)
 
-    register_result(
+    insert_result(
         battle_name=f"週間学習バトル {end.strftime('%Y-%m-%d')}",
         start=end - timedelta(days=6, hours=23, minutes=59, seconds=59),
         end=end,
