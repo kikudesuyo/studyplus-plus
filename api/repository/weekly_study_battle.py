@@ -14,13 +14,15 @@ def insert_result(battle_name, start, end, user_places: List[PlaceModel]):
         [battle_name, start, end],
     )
     battle_id = cur.lastrowid
-    for user_place in user_places:
-        cur.execute(
-            """
-            INSERT INTO result (user_id, battle_id, place) VALUES (?,  ?, ?)
-            """,
-            [user_place.user.id, battle_id, user_place.place],
-        )
+
+    result_data = [
+        (user_place.user.id, battle_id, user_place.place) for user_place in user_places
+    ]
+    cur.executemany(
+        """INSERT INTO result (user_id, battle_id, place) VALUES (?, ?, ?)""",
+        result_data,
+    )
+
     conn.commit()
     cur.close()
     conn.close()
