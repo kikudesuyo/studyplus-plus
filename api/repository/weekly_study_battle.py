@@ -17,19 +17,9 @@ def register_result(battel_name, start, end, user_places: List[PlaceModel]):
     for user_place in user_places:
         cur.execute(
             """
-            SELECT id FROM user WHERE studyplus_user_id = ?
-            """,
-            [user_place.user.studyplus_id],
-        )
-        user_record = cur.fetchone()
-        if not user_record:
-            raise Exception("ユーザーが登録されていません")
-        user_id = user_record[0]
-        cur.execute(
-            """
             INSERT INTO result (user_id, battle_id, place) VALUES (?,  ?, ?)
             """,
-            [user_id, battle_id, user_place.place],
+            [user_place.user.id, battle_id, user_place.place],
         )
     conn.commit()
     cur.close()

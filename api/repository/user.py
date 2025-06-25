@@ -22,9 +22,12 @@ def get_users() -> List[UserModel]:
     cur = conn.cursor()
     cur.execute(
         """
-        SELECT studyplus_user_id, name FROM user
+        SELECT id, studyplus_user_id, name FROM user
         """
     )
     records = cur.fetchall()
     cur.close()
-    return [UserModel(studyplus_id=record[0], name=record[1]) for record in records]
+    return [
+        UserModel(id=record[0], studyplus_id=record[1], name=record[2])
+        for record in records
+    ]

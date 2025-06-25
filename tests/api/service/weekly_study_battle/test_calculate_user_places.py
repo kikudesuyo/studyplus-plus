@@ -56,10 +56,10 @@ def test_calculate_user_places(
     # 1. Arrange: テストデータを作成
     user_total_study_duration = [
         TotalStudyDurationModel(
-            user=UserModel(name=user_name, studyplus_id=f"{user_name}_id"),
+            user=UserModel(id=i, name=user_name, studyplus_id=f"{user_name}_id"),
             total_duration=duration,
         )
-        for user_name, duration in input_durations
+        for i, (user_name, duration) in enumerate(input_durations, start=1)
     ]
 
     # 2. Act: テスト対象の関数を実行
