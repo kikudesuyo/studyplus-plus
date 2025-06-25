@@ -4,14 +4,14 @@ from api.repository.init_db import get_db_connection
 from api.service.weekly_study_battle.model import PlaceModel
 
 
-def register_result(battel_name, start, end, user_places: List[PlaceModel]):
+def register_result(battle_name, start, end, user_places: List[PlaceModel]):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
         """
         INSERT INTO battle (name, start_at, end_at) VALUES (?, ?, ?)
         """,
-        [battel_name, start, end],
+        [battle_name, start, end],
     )
     battle_id = cur.lastrowid
     for user_place in user_places:

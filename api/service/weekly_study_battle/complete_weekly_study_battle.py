@@ -35,7 +35,7 @@ def complete_weekly_study_battle(start: datetime, end: datetime, access_token: s
     user_places: List[PlaceModel] = calculate_user_places(user_total_study_durations)
 
     register_result(
-        battel_name=f"週間学習バトル {end.strftime('%Y-%m-%d')}",
+        battle_name=f"週間学習バトル {end.strftime('%Y-%m-%d')}",
         start=end - timedelta(days=6, hours=23, minutes=59, seconds=59),
         end=end,
         user_places=user_places,
