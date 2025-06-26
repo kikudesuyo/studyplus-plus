@@ -1,25 +1,23 @@
+from sqlite3 import Connection
 from typing import List
 
 from api.model.user_model import UserModel
-from api.repository.init_db import get_db_connection
 
 
-def create_user(user_id: str, username: str):
-    conn = get_db_connection()
-    cur = conn.cursor()
+def create_user(db: Connection, user_id: str, username: str):
+    cur = db.cursor()
     cur.execute(
         """
         INSERT INTO user (studyplus_user_id, name) VALUES (?, ?)
         """,
         [user_id, username],
     )
-    conn.commit()
+    db.commit()
     cur.close()
 
 
-def get_users() -> List[UserModel]:
-    conn = get_db_connection()
-    cur = conn.cursor()
+def get_users(db: Connection) -> List[UserModel]:
+    cur = db.cursor()
     cur.execute(
         """
         SELECT id, studyplus_user_id, name FROM user
