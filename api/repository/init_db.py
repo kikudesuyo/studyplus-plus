@@ -77,4 +77,3 @@ def get_db():
         conn.rollback()
     finally:
         conn.close()
-        print("Database connection closed.")
