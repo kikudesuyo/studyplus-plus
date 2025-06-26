@@ -1,16 +1,19 @@
 <img src="https://github.com/user-attachments/assets/10cddd4f-447a-44b0-abf9-c3a41bdeee82" alt="My Skills" width="60" />
 
-### スタディプラスの 拡張
+![My Skills](https://skillicons.dev/icons?i=python)
 
-### 今後の実装内容
+
+# スタディプラスの 拡張
+
+## 今後の実装内容
 
 - CLI で勉強の投稿をする
   必要な情報
   - AccessToken
 
-### セットアップ方法
+## セットアップ方法
 
-#### 仮想環境セットアップ
+### 仮想環境
 
 ```bash
 cd studyplus-plus/
@@ -28,13 +31,15 @@ pip install -r requirements.txt
 export PYTHONPATH="YOUR_PATH/studyplus-plus/api:$PYTHONPATH"
 ```
 
-#### .env ファイル作成
+### .env ファイル
+
+#### 作成
 
 ```
 cp -p .env.example .env
 ```
 
-#### .env ファイルの編集
+#### 編集
 
 - `CONSUMER_KEY`,`CONSUMER_SECRET` は直接渡すので連絡してください。
 
@@ -42,13 +47,19 @@ cp -p .env.example .env
 
 - `GEMINI_API_KEY` は 登録した **Gemini** の API キーを入力してください。
 
-```env
+
 #### 注意
 
 `CONSUMER_KEY`,`CONSUMER_SECRET`ユーザーに関わらず一意なことは確認済み。
 定期的に更新されるのかを今後確認する必要があります。
 
-### 使用技術
 
-![My Skills](https://skillicons.dev/icons?i=python)
+## ローカルサーバー起動
+```bash
+make dev
+```
+
+## テスト実行
+```bash
+python -m pytest tests/
 ```
