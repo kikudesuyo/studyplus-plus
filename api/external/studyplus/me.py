@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import requests
 
-from api.utils.http_utils import BASE_URL, ApiError, get_auth_headers
+from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class Me:

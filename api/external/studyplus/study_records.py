@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional
 import requests
 from pydantic import BaseModel, ConfigDict, Field
 
-from api.utils.http_utils import BASE_URL, get_auth_headers
+from api.external.studyplus.http_utils import BASE_URL, get_auth_headers
 
 
 class StudyChallengePeriod(BaseModel):
