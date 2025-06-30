@@ -1,4 +1,6 @@
 import sqlite3
+from contextlib import contextmanager
+from sqlite3 import Connection
 
 from api.utils.env_utils import get_required_env_var
 
@@ -54,14 +56,24 @@ def init_db():
     conn.close()
 
 
-def get_db_connection():
+@contextmanager
+def get_db():
     """Returns a database connection."""
     try:
         uri = f"file:{db_name}?mode=rw"
         print(f"Connecting to database at {uri}")
-        return sqlite3.connect(uri, uri=True)
+        conn = sqlite3.connect(uri, uri=True)
     except sqlite3.OperationalError:
         init_db()
         print("Database not found, initializing a new database.")
         uri = f"file:{db_name}?mode=rw"
-        return sqlite3.connect(uri, uri=True)
+        conn = sqlite3.connect(uri, uri=True)
+
+    try:
+        yield conn
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        conn.rollback()
+    finally:
+        conn.close()

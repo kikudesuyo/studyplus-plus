@@ -9,5 +9,4 @@ def auth(consumer_key, consumer_secret, email, pasword) -> AuthModel:
         password=pasword,
         username=email,
     )
-    auth_repo = Auth()
-    return auth_repo.auth(payload)
+    return Auth().auth(payload)
