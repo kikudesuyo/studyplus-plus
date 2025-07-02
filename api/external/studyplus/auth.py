@@ -1,8 +1,8 @@
 import requests
 from pydantic import BaseModel, ConfigDict, Field
 
+from api.external.studyplus.http_utils import BASE_URL, ApiError, get_common_headers
 from api.model.auth_model import AuthModel
-from api.utils.http_utils import BASE_URL, ApiError, get_common_headers
 
 
 class AuthReq(BaseModel):
