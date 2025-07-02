@@ -25,23 +25,25 @@ def handle_get_weekly_study_battle_status():
 
 
 def handle_complete_weekly_study_battle():
-    """週間学習バトルを完了させる"""
+    """週間学習バトルを完了する
+    日本時間で月曜日の4:00~23:59の間にのみ呼び出せる
+    """
     access_token_from_repo = "a5317c96-c5bd-4366-843f-a2068112ad95"
 
     jst = pytz.timezone("Asia/Tokyo")
     now = datetime.now(jst)
-    is_monday = now.weekday() == 0  # 月曜日: 0, 火曜日: 1, ..., 日曜日: 6
+    is_monday = now.weekday() == 0
     if not is_monday:
         raise ValueError("This endpoint can only be called on Mondays.")
-    # 1週間前の月曜日の朝4時(JST)を計算
-    days_since_monday = now.weekday()  # 0=月, 6=日
-    last_monday_jst = (now - timedelta(days=days_since_monday)).replace(
-        hour=4, minute=0, second=0, microsecond=0
-    )
-    end_utc = last_monday_jst.astimezone(pytz.utc)
+
+    monday_4am_jst = now.replace(hour=4, minute=0, second=0, microsecond=0)
+    if now < monday_4am_jst:
+        raise ValueError("This endpoint can only be called after 4 AM JST on Monday.")
+
+    end_utc = monday_4am_jst.astimezone(pytz.utc)
     start_utc = end_utc - timedelta(days=6, hours=23, minutes=59, seconds=59)
     complete_weekly_study_battle(start_utc, end_utc, access_token_from_repo)
     return {
         "message": "Weekly study battle registered successfully",
-        "end_date": last_monday_jst.strftime("%Y-%m-%d %H:%M:%S"),
+        "end_datetime": end_utc.isoformat(),
     }
