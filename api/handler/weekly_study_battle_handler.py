@@ -33,10 +33,9 @@ def handle_complete_weekly_study_battle():
     is_monday = now.weekday() == 0  # 月曜日: 0, 火曜日: 1, ..., 日曜日: 6
     if not is_monday:
         raise ValueError("This endpoint can only be called on Mondays.")
-
     # 1週間前の月曜日の朝4時(JST)を計算
-    days_since_monday = (now.weekday() + 7) % 7  # 0=月, 6=日
-    last_monday_jst = (now - timedelta(days=days_since_monday + 7)).replace(
+    days_since_monday = now.weekday()  # 0=月, 6=日
+    last_monday_jst = (now - timedelta(days=days_since_monday)).replace(
         hour=4, minute=0, second=0, microsecond=0
     )
     end_utc = last_monday_jst.astimezone(pytz.utc)
