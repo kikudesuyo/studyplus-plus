@@ -9,4 +9,10 @@ def auth(consumer_key, consumer_secret, email, pasword) -> AuthModel:
         password=pasword,
         username=email,
     )
-    return Auth().auth(payload)
+
+    res = Auth().auth(payload)
+    return AuthModel(
+        access_token=res.access_token,
+        refresh_token=res.refresh_token,
+        studyplus_user_id=res.username,
+    )
