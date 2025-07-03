@@ -2,7 +2,6 @@ import requests
 from pydantic import BaseModel, ConfigDict, Field
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_common_headers
-from api.model.auth_model import AuthModel
 
 
 class AuthReq(BaseModel):
@@ -14,13 +13,19 @@ class AuthReq(BaseModel):
     username: str = Field(..., alias="username")
 
 
+class AuthRes(BaseModel):
+    access_token: str = Field(..., alias="access_token")
+    refresh_token: str = Field(..., alias="refresh_token")
+    username: str = Field(..., alias="username")
+
+
 class Auth:
     """認証を処理するハンドラークラス"""
 
     def __init__(self):
         self.headers = get_common_headers()
 
-    def auth(self, req_param: AuthReq) -> AuthModel:
+    def auth(self, req_param: AuthReq) -> AuthRes:
         """認証を実行し、アクセストークンを取得する"""
         endpoint = f"{BASE_URL}/client_auth"
         payload = {
@@ -32,7 +37,7 @@ class Auth:
 
         response = requests.post(endpoint, json=payload, headers=self.headers)
         if response.status_code == 200:
-            return AuthModel(**response.json())
+            return AuthRes(**response.json())
         else:
             raise ApiError(
                 status_code=response.status_code,
