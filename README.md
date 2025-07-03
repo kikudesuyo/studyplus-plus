@@ -1,6 +1,6 @@
 <img src="https://github.com/user-attachments/assets/10cddd4f-447a-44b0-abf9-c3a41bdeee82" alt="My Skills" width="60" />
 
-![My Skills](https://skillicons.dev/icons?i=python)
+![My Skills](https://skillicons.dev/icons?i=python,fastapi)
 
 
 # スタディプラスの 拡張
