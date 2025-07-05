@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 import requests
 from pydantic import BaseModel, Field
@@ -28,7 +28,7 @@ class BodyStudyRecord(BaseModel):
     amount: int
     duration: int
     record_date: str
-    record_datetime: str
+    record_datetime: str  # 2025-06-30T10:03:11Z # ISO 8601形式
     record_start: str
     images: List[str]
     tags: List[str]
@@ -36,7 +36,7 @@ class BodyStudyRecord(BaseModel):
 
 
 class Feed(BaseModel):
-    feed_type: str
+    feed_type: Literal["study_record", "study_challenge", "ads"]
     body_study_record: Optional[BodyStudyRecord] = None
 
 

@@ -112,6 +112,7 @@ class StudyRecord:
 
     def put(
         self,
+        record_id: int,
         material_code: str,
         duration: int,
         comment: Optional[str] = None,
@@ -133,7 +134,7 @@ class StudyRecord:
             study_source_type="studyplus",
         )
 
-        endpoint = f"{BASE_URL}/study_records"
+        endpoint = f"{BASE_URL}/study_records/{record_id}"
         res: Response = requests.put(
             endpoint, json=req.model_dump(), headers=self.headers
         )
