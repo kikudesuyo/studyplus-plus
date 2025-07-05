@@ -8,7 +8,7 @@ from api.external.studyplus.timeline_feeds import TimelineFeeds
 
 def replace_midnight_record_time(access_token: str, user_id: str) -> None:
     """
-    深夜(00:00~03:59)の勉強記録の時間を置き換える
+    深夜(00:00~03:59)の勉強記録の時間を前日の23:59に置き換える
 
     Note:
         直近30件分の学習記録に対して処理を行います。
