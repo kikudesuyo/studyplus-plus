@@ -1,9 +1,9 @@
 from api.service.auth import auth
-from api.service.repwrite_midnight_record import repwrite_midnight_record_time
+from api.service.repwrite_midnight_record import rewrite_midnight_record_time
 from api.utils.env_utils import get_required_env_var
 
 
-def handle_repwrite_midnight_record_time():
+def handle_rewrite_midnight_record_time():
     """
     深夜の勉強記録の時間を書き換える
     TODO: アクセストークンの取得方法をDB経由で行うように変更する
@@ -22,7 +22,7 @@ def handle_repwrite_midnight_record_time():
     )
     access_token = res.access_token
     user_id = res.studyplus_user_id
-    repwrite_midnight_record_time(access_token, user_id)
+    rewrite_midnight_record_time(access_token, user_id)
     return {
         "message": "Midnight records replaced successfully",
     }
