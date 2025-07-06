@@ -1,14 +1,27 @@
+from api.service.auth import auth
 from api.service.replace_midnight_record import replace_midnight_record_time
+from api.utils.env_utils import get_required_env_var
 
 
 def handle_replace_midnight_record_time():
     """
     深夜の勉強記録の時間を置き換える。
+    TODO: アクセストークンの取得方法をDB経由で行うように変更する
 
     - **access_token**: ユーザーのアクセストークン
     """
-    access_token = "a5317c96-c5bd-4366-843f-a2068112ad95"
-    user_id = "1156ae8afada4777aeb18e78c2ce752d"
+    consumer_key = get_required_env_var("CONSUMER_KEY")
+    consumer_secret = get_required_env_var("CONSUMER_SECRET")
+    password = get_required_env_var("DEV_STUDYPLUS_PASSWORD")
+    email = get_required_env_var("DEV_STUDYPLUS_EMAIL")
+    res = auth(
+        consumer_key=consumer_key,
+        consumer_secret=consumer_secret,
+        email=email,
+        pasword=password,
+    )
+    access_token = res.access_token
+    user_id = res.studyplus_user_id
     replace_midnight_record_time(access_token, user_id)
     return {
         "message": "Midnight records replaced successfully",
