@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from api.handler.auth_handler import handle_get_auth
 from api.handler.replace_midnight_record_handler import (
-    handle_replace_midnight_record_time,
+    handle_repwrite_midnight_record_time,
 )
 from api.handler.user_handler import handle_register_user
 from api.handler.weekly_study_battle_handler import (
@@ -37,7 +37,7 @@ r.add_api_route(
 
 r.add_api_route(
     "/study-record/midnight",
-    handle_replace_midnight_record_time,
+    handle_repwrite_midnight_record_time,
     methods=["PUT"],
 )
 
