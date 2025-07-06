@@ -30,7 +30,7 @@ def like_followees_timeline_records(access_token: str) -> None:
 
 
 LIKE_PROBABILITY = 0.3
-LIKE_TARGET_LIMIT = 10
+LIKE_TARGET_LIMIT = 5
 
 
 def like_followees_timeline_records_randomly(access_token: str) -> None:
