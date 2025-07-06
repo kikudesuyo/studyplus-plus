@@ -1,5 +1,5 @@
 from api.service.auth import auth
-from api.service.repwrite_midnight_record import rewrite_midnight_record_time
+from api.service.rewrite_midnight_record import rewrite_midnight_record_time
 from api.utils.env_utils import get_required_env_var
 
 
