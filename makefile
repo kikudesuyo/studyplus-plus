@@ -75,7 +75,7 @@ cron_miyavin_like_followees_timeline_records:
 	gcloud scheduler jobs create http like-study-records-job \
 		--location=$(GCP_REGION) \
 		--description="miyavinがユーザーの学習記録にいいねをする" \
-		--schedule="0 0 */3 * *" \
+		--schedule="0 0 */2 * *" \
 		--uri ${MIYAVIN_LIKE_JOB_ENDPOINT} \
 		--http-method=POST \
 		--time-zone="UTC" \
