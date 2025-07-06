@@ -1,7 +1,7 @@
 from api.service.like_record import like_followees_timeline_records
 
 
-def handle_like_followees_record_handler():
+def handle_like_followees_record():
     """
     フォロー中のユーザーの学習記録にいいねをするハンドラー
 
