@@ -32,6 +32,7 @@ setup-gcp:
 .PHONY: push-studyplus deploy-studyplus
 
 WEEKLY_BATTLE_JOB_ENDPOINT = "https://studyplus-api-445395497817.asia-northeast1.run.app/weekly-study-battle"
+MIYAVIN_LIKE_JOB_ENDPOINT = "https://studyplus-api-445395497817.asia-northeast1.run.app/timeline/followees/like/as-miyavin"
 
 DEV_DB_PATH = api/studyplus-plus.db
 
@@ -58,16 +59,27 @@ deploy-studyplus:
 studyplus-all: push-studyplus deploy-studyplus
 
 
+#毎週日曜日19:00(日本時間は月曜日の04:00)に勉強結果をStudyplusにPOSTする
 cron-weekly-study-battle:
 	gcloud scheduler jobs create http register-weekly-battle-job \
 		--location=$(GCP_REGION) \
 		--description="1週間の勉強結果をStudyplusにPOSTする" \
-		--schedule="0 19 * * 0" \
+		--schedule="0 19 * * 0" \  
 		--uri ${WEEKLY_BATTLE_JOB_ENDPOINT} \
 		--http-method=POST \
 		--time-zone="UTC" \
 		--project=$(GCP_PROJECT_ID) \
 
+#miyavinがユーザーの学習記録にいいねをするかもしれない
+cron_miyavin_like_followees_timeline_records:
+	gcloud scheduler jobs create http like-study-records-job \
+		--location=$(GCP_REGION) \
+		--description="miyavinがユーザーの学習記録にいいねをする" \
+		--schedule="0 0 */3 * *" \
+		--uri ${MIYAVIN_LIKE_JOB_ENDPOINT} \
+		--http-method=POST \
+		--time-zone="UTC" \
+		--project=$(GCP_PROJECT_ID) \
 
 
 
