@@ -4,6 +4,7 @@ from typing import Any, Dict, Optional
 
 import requests
 from pydantic import BaseModel, ConfigDict, Field
+from requests import Response
 
 from api.external.studyplus.http_utils import BASE_URL, get_auth_headers
 
@@ -99,10 +100,45 @@ class StudyRecord:
         )
         endpoint = f"{BASE_URL}/study_records"
 
-        response = requests.post(endpoint, json=req.model_dump(), headers=self.headers)
+        response: Response = requests.post(
+            endpoint, json=req.model_dump(), headers=self.headers
+        )
         if response.status_code == 200:
             return StudyRecordRes(**response.json())
         else:
             raise Exception(
                 f"Failed to create study record: {response.status_code} - {response.text}"
+            )
+
+    def put(
+        self,
+        record_id: int,
+        material_code: str,
+        duration: int,
+        comment: Optional[str] = None,
+        post_token: Optional[str] = None,
+        record_datetime: Optional[str] = None,
+    ) -> None:
+        """勉強記録を更新する"""
+        if not post_token:
+            post_token = self._generate_post_token()
+        if not record_datetime:
+            record_datetime = self._get_current_datetime_iso()
+        req = StudyRecordReq(
+            material_code=material_code,
+            duration=duration,
+            post_token=post_token,
+            record_datetime=record_datetime,
+            comment=comment,
+            runtimeType="default",
+            study_source_type="studyplus",
+        )
+
+        endpoint = f"{BASE_URL}/study_records/{record_id}"
+        res: Response = requests.put(
+            endpoint, json=req.model_dump(), headers=self.headers
+        )
+        if res.status_code != 204:
+            raise Exception(
+                f"Failed to update study record: {res.status_code} - {res.text}"
             )
