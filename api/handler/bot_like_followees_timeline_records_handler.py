@@ -1,7 +1,7 @@
 from api.service.like_record import like_followees_timeline_records_randomly
 
 
-def handle_like_followees_timeline_records_as_miyavin():
+def handle_like_followees_timeline_records_by_bot():
     """
     フォロー中のユーザーの学習記録にいいねをするハンドラー
 

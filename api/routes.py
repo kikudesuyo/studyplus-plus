@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from api.handler.auth_handler import handle_get_auth
 from api.handler.bot_like_followees_timeline_records_handler import (
-    handle_like_followees_timeline_records_as_miyavin,
+    handle_like_followees_timeline_records_by_bot,
 )
 from api.handler.like_followees_timeline_records_handler import (
     handle_like_followees_timeline_records,
@@ -55,8 +55,8 @@ r.add_api_route(
 )
 
 r.add_api_route(
-    "/timeline/followees/records/like/as-miyavin",
-    handle_like_followees_timeline_records_as_miyavin,
+    "/timeline/followees/records/like/bot",
+    handle_like_followees_timeline_records_by_bot,
     methods=["POST"],
 )
 
