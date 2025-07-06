@@ -9,7 +9,7 @@ class TimelineEvents:
 
     def like(self, event_id: int) -> None:
         """イベントにいいねをする"""
-        endpoint = f"{BASE_URL}/timeline_events/{event_id}/like"
+        endpoint = f"{BASE_URL}/timeline_events/{event_id}/likes/like"
         response = requests.post(endpoint, headers=self.headers)
         if response.status_code != 200:
             raise ApiError(
@@ -20,7 +20,7 @@ class TimelineEvents:
 
     def withdraw_like(self, event_id: int) -> None:
         """イベントのいいねを取り消す"""
-        endpoint = f"{BASE_URL}/timeline_events/{event_id}/withdraw_like"
+        endpoint = f"{BASE_URL}/timeline_events/{event_id}/likes/withdraw_like"
         response = requests.post(endpoint, headers=self.headers)
         if response.status_code != 200:
             raise ApiError(

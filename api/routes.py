@@ -1,6 +1,9 @@
 from fastapi import APIRouter
 
 from api.handler.auth_handler import handle_get_auth
+from api.handler.like_followees_timeline_records_handler import (
+    handle_like_followees_record,
+)
 from api.handler.rewrite_midnight_record_handler import (
     handle_rewrite_midnight_record_time,
 )
@@ -39,6 +42,12 @@ r.add_api_route(
     "/study-record/midnight",
     handle_rewrite_midnight_record_time,
     methods=["PUT"],
+)
+
+r.add_api_route(
+    "/timeline/followees/records/like",
+    handle_like_followees_record,
+    methods=["POST"],
 )
 
 
