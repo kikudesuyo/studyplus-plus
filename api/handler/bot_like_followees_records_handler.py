@@ -7,8 +7,6 @@ def handle_like_followees_records_by_bot():
     """
     フォロー中のユーザーの学習記録にいいねをするハンドラー
 
-    Args:
-        access_token: アクセストークン
     """
     consumer_key = get_required_env_var("CONSUMER_KEY")
     consumer_secret = get_required_env_var("CONSUMER_SECRET")
