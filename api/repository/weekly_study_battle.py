@@ -26,4 +26,3 @@ def insert_result(
 
     db.commit()
     cur.close()
-    db.close()

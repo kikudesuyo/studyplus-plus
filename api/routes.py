@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
 from api.handler.auth_handler import handle_get_auth
-from api.handler.like_followees_timeline_records_handler import (
-    handle_like_followees_record,
+from api.handler.bot_like_followees_records_handler import (
+    handle_like_followees_records_by_bot,
 )
+from api.handler.like_followees_records_handler import handle_like_followees_records
 from api.handler.rewrite_midnight_record_handler import (
     handle_rewrite_midnight_record_time,
 )
@@ -44,12 +45,18 @@ r.add_api_route(
     methods=["PUT"],
 )
 
+
 r.add_api_route(
-    "/timeline/followees/records/like",
-    handle_like_followees_record,
+    "/followees/records/like",
+    handle_like_followees_records,
     methods=["POST"],
 )
 
+r.add_api_route(
+    "/followees/records/like/bot",
+    handle_like_followees_records_by_bot,
+    methods=["POST"],
+)
 
 # 想定: mcp経由で学習記録を登録出来る
 r.add_api_route("/register-record/mcp", lambda: None, methods=["POST"])

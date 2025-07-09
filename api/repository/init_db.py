@@ -1,6 +1,5 @@
 import sqlite3
 from contextlib import contextmanager
-from sqlite3 import Connection
 
 from api.utils.env_utils import get_required_env_var
 
