@@ -45,7 +45,7 @@ class Auth:
             )
         except httpx.RequestError as e:
             raise ApiError(
-                status_code=0,
+                status_code=None,
                 message=str(e),
                 endpoint=endpoint,
             )

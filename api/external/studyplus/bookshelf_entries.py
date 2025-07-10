@@ -66,7 +66,7 @@ class BookshelfEntries:
             )
         except httpx.RequestError as e:
             raise ApiError(
-                status_code=0,
+                status_code=None,
                 message=f"[External/Studyplus] Communication error: {str(e)}",
                 endpoint=endpoint,
                 query=param,
