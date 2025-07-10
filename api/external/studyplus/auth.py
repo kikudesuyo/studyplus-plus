@@ -46,7 +46,7 @@ class Auth:
         except httpx.RequestError as e:
             raise ApiError(
                 status_code=0,
-                message=str(e),
+                message=f"[External/Studyplus] Communication error: {str(e)}",
                 endpoint=endpoint,
             )
         return AuthRes(**response.json())
