@@ -1,4 +1,4 @@
-import requests
+import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_common_headers
@@ -34,13 +34,19 @@ class Auth:
             "password": req_param.password,
             "username": req_param.username,
         }
-
-        response = requests.post(endpoint, json=payload, headers=self.headers)
-        if response.status_code == 200:
-            return AuthRes(**response.json())
-        else:
+        try:
+            response = httpx.post(endpoint, json=payload, headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
                 endpoint=endpoint,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=0,
+                message=str(e),
+                endpoint=endpoint,
+            )
+        return AuthRes(**response.json())

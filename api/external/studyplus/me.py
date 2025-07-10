@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-import requests
+import httpx
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
 
@@ -16,13 +16,19 @@ class Me:
         """現在のユーザー情報を取得する"""
         endpoint = f"{BASE_URL}/me"
 
-        response = requests.get(endpoint, headers=self.headers)
-
-        if response.status_code == 200:
-            return response.json()
-        else:
+        try:
+            response = httpx.get(endpoint, headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
                 endpoint=endpoint,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=0,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
+            )
+        return response.json()
