@@ -1,4 +1,4 @@
-import requests
+import httpx
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
 
@@ -10,21 +10,37 @@ class TimelineEvents:
     def like(self, event_id: int) -> None:
         """イベントにいいねをする"""
         endpoint = f"{BASE_URL}/timeline_events/{event_id}/likes/like"
-        response = requests.post(endpoint, headers=self.headers)
-        if response.status_code != 200:
+        try:
+            response = httpx.post(endpoint, headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
+                endpoint=endpoint,
+            )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
                 endpoint=endpoint,
             )
 
     def withdraw_like(self, event_id: int) -> None:
         """イベントのいいねを取り消す"""
         endpoint = f"{BASE_URL}/timeline_events/{event_id}/likes/withdraw_like"
-        response = requests.post(endpoint, headers=self.headers)
-        if response.status_code != 200:
+        try:
+            response = httpx.post(endpoint, headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
+                endpoint=endpoint,
+            )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
                 endpoint=endpoint,
             )
