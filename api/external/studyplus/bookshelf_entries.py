@@ -1,6 +1,6 @@
 from typing import Optional
 
-import requests
+import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
@@ -54,13 +54,21 @@ class BookshelfEntries:
         endpoint = f"{BASE_URL}/bookshelf_entries"
         param = self.req.model_dump(by_alias=True)
 
-        response = requests.get(endpoint, headers=self.headers, params=param)
-        if response.status_code == 200:
-            return BookshelfEntriesRes(**response.json())
-        else:
+        try:
+            response = httpx.get(endpoint, headers=self.headers, params=param)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
                 endpoint=endpoint,
                 query=param,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
+                query=param,
+            )
+        return BookshelfEntriesRes(**response.json())

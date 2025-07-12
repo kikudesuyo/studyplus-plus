@@ -36,9 +36,9 @@ class ApiError(Exception):
 
     def __init__(
         self,
-        status_code: int,
         message: str,
         endpoint: str,
+        status_code: Optional[int] = None,
         query: Optional[Dict[str, Any]] = None,
         body: Optional[Dict[str, Any]] = None,
     ):

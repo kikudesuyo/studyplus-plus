@@ -1,6 +1,6 @@
 from typing import List, Literal, Optional
 
-import requests
+import httpx
 from pydantic import BaseModel, Field
 
 from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
@@ -72,16 +72,23 @@ class TimelineFeeds:
         endpoint = f"{BASE_URL}/timeline_feeds/followee"
         params = req.model_dump(by_alias=True)
 
-        response = requests.get(endpoint, headers=self.headers, params=params)
-        if response.status_code == 200:
-            return FeedsRes(**response.json())
-        else:
+        try:
+            response = httpx.get(endpoint, headers=self.headers, params=params)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
                 endpoint=endpoint,
                 query=params,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
+            )
+        return FeedsRes(**response.json())
 
     def get_user_study_feeds(self, user_id, until) -> FeedsRes:
         """自分の学習記録を取得する
@@ -99,13 +106,20 @@ class TimelineFeeds:
         endpoint = f"{BASE_URL}/timeline_feeds/user/{user_id}"
         params = req.model_dump(by_alias=True)
 
-        response = requests.get(endpoint, headers=self.headers, params=params)
-        if response.status_code == 200:
-            return FeedsRes(**response.json())
-        else:
+        try:
+            response = httpx.get(endpoint, headers=self.headers, params=params)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
             raise ApiError(
-                status_code=response.status_code,
-                message=response.text,
+                status_code=e.response.status_code,
+                message=e.response.text,
                 endpoint=endpoint,
                 query=params,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
+            )
+        return FeedsRes(**response.json())

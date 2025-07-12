@@ -2,11 +2,10 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-import requests
+import httpx
 from pydantic import BaseModel, ConfigDict, Field
-from requests import Response
 
-from api.external.studyplus.http_utils import BASE_URL, get_auth_headers
+from api.external.studyplus.http_utils import BASE_URL, ApiError, get_auth_headers
 
 
 class StudyChallengePeriod(BaseModel):
@@ -100,15 +99,22 @@ class StudyRecord:
         )
         endpoint = f"{BASE_URL}/study_records"
 
-        response: Response = requests.post(
-            endpoint, json=req.model_dump(), headers=self.headers
-        )
-        if response.status_code == 200:
-            return StudyRecordRes(**response.json())
-        else:
-            raise Exception(
-                f"Failed to create study record: {response.status_code} - {response.text}"
+        try:
+            response = httpx.post(endpoint, json=req.model_dump(), headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            raise ApiError(
+                status_code=e.response.status_code,
+                message=e.response.text,
+                endpoint=endpoint,
             )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
+            )
+        return StudyRecordRes(**response.json())
 
     def put(
         self,
@@ -135,10 +141,18 @@ class StudyRecord:
         )
 
         endpoint = f"{BASE_URL}/study_records/{record_id}"
-        res: Response = requests.put(
-            endpoint, json=req.model_dump(), headers=self.headers
-        )
-        if res.status_code != 204:
-            raise Exception(
-                f"Failed to update study record: {res.status_code} - {res.text}"
+        try:
+            response = httpx.put(endpoint, json=req.model_dump(), headers=self.headers)
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            raise ApiError(
+                status_code=e.response.status_code,
+                message=e.response.text,
+                endpoint=endpoint,
+            )
+        except httpx.RequestError as e:
+            raise ApiError(
+                status_code=None,
+                message=f"[External/Studyplus] Communication error: {str(e)}",
+                endpoint=endpoint,
             )
