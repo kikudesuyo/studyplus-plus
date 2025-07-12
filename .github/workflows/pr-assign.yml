@@ -1,0 +1,33 @@
+name: Auto Assign
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Assign author
+        run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Add reviewers
+        run: |
+          REVIEWERS="github-copilot" # Assuming ''github-copilot'' is a user/team
+          # Please replace ''NON_DEVELOPER_TEAM'' with the actual team name for non-developers
+          REVIEWERS="$REVIEWERS,NON_DEVELOPER_TEAM"
+
+          if [[ "${{ github.actor }}" == "eteRnaL198" ]]; then
+            REVIEWERS="$REVIEWERS,kikudesuyo"
+          elif [[ "${{ github.actor }}" == "kikudesuyo" ]]; then
+            REVIEWERS="$REVIEWERS,eteRnaL198"
+          else
+            REVIEWERS="$REVIEWERS,eteRnaL198,kikudesuyo"
+          fi
+          gh pr edit ${{ github.event.pull_request.number }} --add-reviewer "$REVIEWERS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
