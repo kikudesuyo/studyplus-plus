@@ -1,4 +1,4 @@
-name: Auto Assign
+name: Auto Assign PR Assignees and Reviewers
 on:
   pull_request:
     types: [opened]
