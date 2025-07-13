@@ -25,6 +25,3 @@ def send_discord_msg(msg: str) -> None:
             status_code=None,
             message=f"[External/Studyplus] Communication error: {str(e)}",
         )
-
-
-send_discord_msg("Hello, Discord!")
