@@ -1,4 +1,3 @@
-# from google import genai
 from google.genai import Client, types
 
 from api.utils.env_utils import get_required_env_var
