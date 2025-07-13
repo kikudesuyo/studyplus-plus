@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from api.external.gemini.client import generate_content_with_gemini
+from api.external.gemini.client import GeminiClient
 from api.service.weekly_study_battle.model import PlaceModel
 
 
@@ -58,6 +58,6 @@ def _generate_result_summary(user_places: List[PlaceModel]) -> str:
     10. 各ユーザーのコメントは1~2文程度にしてください。
     11. 前置きや説明文は一切書かず、コメント本文のみを出力してください。
     """
-    return generate_content_with_gemini(
+    return GeminiClient().generate_content(
         prompt=prompt,
     )
