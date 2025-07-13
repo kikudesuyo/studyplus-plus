@@ -23,5 +23,5 @@ def send_discord_msg(msg: str) -> None:
     except httpx.RequestError as e:
         raise ApiError(
             status_code=None,
-            message=f"[External/Studyplus] Communication error: {str(e)}",
+            message=f"[External/Discord] Communication error: {str(e)}",
         )
