@@ -1,13 +1,19 @@
 import traceback
+from typing import Protocol
 
 from fastapi import Request
 
-from api.external.discord.bot import send_discord_msg
+
+class Notifier(Protocol):
+    def notify(self, message: str) -> None: ...
 
 
 class ErrorReporter:
-    @staticmethod
-    def report_exception(request: Request, exc: Exception):
+
+    def __init__(self, notifier: Notifier):
+        self.notifier = notifier
+
+    def report_exception(self, request: Request, exc: Exception):
         tb = "".join(traceback.format_exception(None, exc, exc.__traceback__))
         message = (
             f"🚨 ***Error Reported from API🚨***\n"
@@ -16,4 +22,4 @@ class ErrorReporter:
             f"エラー: `{str(exc)}`\n"
             f"Traceback:\n```{tb[:1500]}```"
         )
-        send_discord_msg(message)
+        self.notifier.notify(message)

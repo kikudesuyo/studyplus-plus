@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.external.discord.notifiler import DiscordNotifier
 from api.routes import r
 from api.utils.error_reporter import ErrorReporter
 
@@ -13,7 +14,8 @@ app = FastAPI()
 # Exception handler to report errors
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
-    ErrorReporter.report_exception(request, exc)
+    dicrod_notifier = DiscordNotifier()
+    ErrorReporter(dicrod_notifier).report_exception(request, exc)
 
 
 app.add_middleware(
