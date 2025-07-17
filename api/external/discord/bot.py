@@ -7,7 +7,7 @@ from api.utils.env_utils import get_required_env_var
 def send_discord_msg(msg: str) -> None:
     payload = {
         "content": msg,
-        "username": "miyabi",
+        "username": "miyavin",
         "avatar_url": "https://example.com/avatar.png",
     }
 
