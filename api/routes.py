@@ -17,12 +17,6 @@ from api.handler.weekly_study_battle_handler import (
 r = APIRouter()
 
 r.add_api_route(
-    "/error",
-    lambda: (_ for _ in ()).throw(Exception("This is a test error")),
-    methods=["GET"],
-)
-
-r.add_api_route(
     "/auth",
     handle_get_auth,
     methods=["POST"],
