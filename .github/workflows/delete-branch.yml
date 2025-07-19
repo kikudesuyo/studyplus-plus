@@ -1,0 +1,20 @@
+name: Delete Branch on PR Close
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete_branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Delete branch
+        run: |
+          # Only delete branch if it's not the default branch
+          if [[ "${{ github.event.pull_request.head.ref }}" != "${{ github.event.repository.default_branch }}" ]]; then
+            gh api repos/${{ github.repository }}/git/refs/heads/${{ github.event.pull_request.head.ref }} -X DELETE
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
