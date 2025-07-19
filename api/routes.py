@@ -16,7 +16,6 @@ from api.handler.weekly_study_battle_handler import (
 
 r = APIRouter()
 
-
 r.add_api_route(
     "/auth",
     handle_get_auth,

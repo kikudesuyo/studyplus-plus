@@ -29,29 +29,3 @@ def get_auth_headers(access_token: str) -> Dict[str, str]:
     headers = get_common_headers()
     headers["Authorization"] = f"OAuth {access_token}"
     return headers
-
-
-class ApiError(Exception):
-    """APIリクエストのエラーを表す例外クラス"""
-
-    def __init__(
-        self,
-        message: str,
-        endpoint: str,
-        status_code: Optional[int] = None,
-        query: Optional[Dict[str, Any]] = None,
-        body: Optional[Dict[str, Any]] = None,
-    ):
-        self.status_code = status_code
-        self.message = message
-        self.endpoint = endpoint
-        self.query = query
-        self.body = body
-
-    def __str__(self) -> str:
-        return (
-            f"API Error: {self.status_code} {self.message}\n"
-            f"Endpoint: {self.endpoint}\n"
-            f"Query: {self.query}\n"
-            f"Body: {self.body}"
-        )
